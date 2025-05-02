@@ -1,8 +1,9 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import BucketList from './pages/BucketList';
-import CompletedGoals from './pages/CompletedGoals';
-import Feed from './pages/Feed';
-import Notifications from './pages/Notifications';
+import BucketList from './pages/BucketList.js';
+import CompletedGoals from './pages/CompletedGoals.js';
+import Feed from './pages/Feed.js';
+import Notifications from './pages/Notifications.js';
 
 function App() {
   return (
@@ -16,3 +17,5 @@ function App() {
     </Router>
   );
 }
+
+export default App;
