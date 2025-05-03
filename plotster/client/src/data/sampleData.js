@@ -85,10 +85,12 @@ const sampleUser = {
     }
   ];
   
-  export default {
+  const sampleData = {
     user: sampleUser,
     bucketList: sampleBucketList,
     friends: sampleFriends,
     notifications: sampleNotifications
   };
+
+  export default sampleData;
   
