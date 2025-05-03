@@ -13,7 +13,7 @@ const CompletedGoal = ({ goal }) => {
       <h3>{goal.title}</h3>
       <div className="scrapbook">
         {photos.map((photo, index) => (
-          <img key={index} src={photo} alt={`Goal Photo ${index}`} className="scrapbook-photo" />
+          <img key={index} src={photo} alt={`Pic for this goal`} className="scrapbook-photo" />
         ))}
       </div>
       <input type="file" onChange={handlePhotoUpload} />
