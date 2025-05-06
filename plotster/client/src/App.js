@@ -5,6 +5,7 @@ import CompletedGoals from './pages/CompletedGoals';
 import Feed from './pages/Feed';
 import Notifications from './pages/Notifications';
 import sampleData from './data/sampleData';
+import './styles/global.css'
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('bucket');
