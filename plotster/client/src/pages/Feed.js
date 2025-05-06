@@ -18,15 +18,15 @@ export default function Feed({ friends, user, onRSVP }) {
             <h3 className="font-medium">{friend.name}'s Goals</h3>
           </div>
 
-          {friend.bucketList.map(item => (
-            <BucketItem
-              key={item.id}
-              item={item}
-              friend={friend}
-              user={user}
-              showRSVP={true}
-              onRSVP={onRSVP}
-            />
+          {friend.bucketList?.map(item => (
+              <BucketItem
+                key={item.id}
+                item={item}
+                friend={friend}
+                user={user}
+                showRSVP={true}
+                onRSVP={onRSVP}
+              />
           ))}
         </div>
       ))}

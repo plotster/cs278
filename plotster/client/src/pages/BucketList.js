@@ -2,7 +2,7 @@
 import React from 'react';
 import BucketItem from '../components/BucketItem';
 
-export default function BucketList({ goals, onComplete }) {
+const BucketList = ({ goals, onComplete }) => {
   const incompleteGoals = goals.filter(goal => !goal.completed);
 
   return (
@@ -28,4 +28,6 @@ export default function BucketList({ goals, onComplete }) {
       )}
     </div>
   );
-}
+};
+
+export default BucketList;

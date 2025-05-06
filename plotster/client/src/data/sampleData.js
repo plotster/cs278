@@ -14,7 +14,8 @@ const sampleUser = {
         { id: 2, name: "Jordan Lee", avatar: "https://placekitten.com/101/101" },
         { id: 3, name: "Taylor Kim", avatar: "https://placekitten.com/102/102" }
       ],
-      completed: false
+      completed: false,
+      photos: []
     },
     {
       id: 2,
@@ -22,7 +23,8 @@ const sampleUser = {
       location: "Sakura Ramen, Downtown",
       date: "May 10, 2025",
       participants: [{ id: 4, name: "Riley Johnson", avatar: "https://placekitten.com/103/103" }],
-      completed: false
+      completed: false,
+      photos: []
     },
     {
       id: 3,
