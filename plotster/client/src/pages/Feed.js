@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import BucketItem from '../components/BucketItem';
 import sampleData from '../data/sampleData';
+import { handleComplete, handleRSVP } from '../util/BucketListHelper';
 
 export default function Feed({user}) {
 
@@ -9,46 +10,6 @@ export default function Feed({user}) {
   // const [notifications, setNotifications] = useState(sampleNotifications);
   // const [activeTab, setActiveTab] = useState('bucket');
   // const [showNotifications, setShowNotifications] = useState(false);
-
-  // Helper function to mark a bucket list item as completed
-  const handleComplete = (itemId) => {
-    setBucketList((list) =>
-      list.map((item) =>
-        item.id === itemId
-          ? {
-              ...item,
-              completed: true,
-              photos: ["/api/placeholder/300/200", "/api/placeholder/200/300"],
-            }
-          : item
-      )
-    );
-  };
-
-  // Helper function to handle RSVP actions
-  const handleRSVP = (friendId, itemId) => {
-    setFriends((fList) =>
-      fList.map((friend) =>
-        friend.id === friendId
-          ? {
-              ...friend,
-              bucketList: friend.bucketList.map((item) =>
-                item.id === itemId
-                  ? {
-                      ...item,
-                      participants: item.participants.some(
-                        (p) => p.id === user.id
-                      )
-                        ? item.participants.filter((p) => p.id !== user.id)
-                        : [...item.participants, user],
-                    }
-                  : item
-              ),
-            }
-          : friend
-      )
-    );
-  };
 
   return (
     <div>
@@ -72,8 +33,10 @@ export default function Feed({user}) {
               friend={friend}
               currentUser={user}
               showRSVP={true}
-              onRSVP={handleRSVP}
-              onComplete={handleComplete} 
+              onRSVP={(friendId, itemId) =>
+                handleRSVP(friendId, itemId, user, setFriends)
+              }
+              onComplete={(itemId) => handleComplete(itemId, setBucketList)} 
             />
           ))}
         </div>
