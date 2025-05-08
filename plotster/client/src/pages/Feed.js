@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import BucketItem from '../components/BucketItem';
-import sampleData from '../data/sampleData';
 import { handleComplete, handleRSVP } from '../util/BucketListHelper';
 
 export default function Feed({user, friends, setFriends, bucketList, setBucketList}) {
