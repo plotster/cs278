@@ -6,6 +6,7 @@ import CompletedGoals from './pages/CompletedGoals';
 import Feed from './pages/Feed';
 import Notifications from './pages/Notifications';
 import Header from './components/Header';
+import SelectionBar from './components/SelectionBar';
 import sampleData from './data/sampleData';
 import './styles/global.css'
 
@@ -22,14 +23,16 @@ const App = () => {
         <Header user={sampleData.user} />
       </div>
 
+      <div className="selection-container">
+        <SelectionBar/>
+      </div>
+
       <div className="content-container">
-        <Router>
           <Routes>
             <Route path="/" element={<BucketList goals={bucketList} setBucketList={setBucketList}/>} />
             <Route path="/completed" element={<CompletedGoals goals={bucketList} />} />
             <Route path="/feed" element={<Feed user={sampleData.user} friends={friends} setFriends={setFriends} bucketList={bucketList} setBucketList={setBucketList}/>} />
           </Routes>
-        </Router>
       </div>
     </div>
   );

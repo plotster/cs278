@@ -14,8 +14,25 @@ code {
     monospace;
 }
 
+.header-container {
+
+}
+
+.selection-container {
+  margin-bottom: 1rem;
+}
+
 .content-container {
   margin: 1rem;
+}
+
+.bar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center; 
+  margin-top: 1rem;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
 }
 
 /* Header Styling */
@@ -26,7 +43,6 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
 }
 
 header .user-profile {
