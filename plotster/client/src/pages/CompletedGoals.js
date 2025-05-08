@@ -10,7 +10,7 @@ export default function CompletedGoals({ goals }) {
   return (
     <div>
       
-      <h2 className="text-xl font-semibold mb-4">Completed Goals</h2>
+      <h2 className="page_header">Completed Goals</h2>
 
       {completedGoals.length > 0 ? (
         completedGoals.map(goal => (

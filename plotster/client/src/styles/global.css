@@ -6,7 +6,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f9fafb; /* Light background for consistency */
+  background-color: #dceeff; /* Light background for consistency */
 }
 
 code {
@@ -15,12 +15,12 @@ code {
 }
 
 .content-container {
-  margin: 1rem
+  margin: 1rem;
 }
 
 /* Header Styling */
 header {
-  background-color: #8b5cf6;
+  background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1rem 2rem;
   display: flex;
@@ -43,7 +43,13 @@ header .user-profile .avatar {
 
 header .user-profile .user-name {
   font-weight: 500;
-  color: white;
+  color: black;
+}
+
+.page_header {
+  font-size: 1.5rem; /* Matches text-xl */
+  font-weight: 600; /* Matches font-semibold */
+  padding-left: 0.25rem; /* Add padding on the left */
 }
 
 /* Page Titles */

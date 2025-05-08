@@ -7,7 +7,7 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">Friend Feed</h2>
+      <h2 className="page_header">Friend Feed</h2>
 
       {friends.map((friend) => (
         <div key={friend.id} className="mb-6">
