@@ -1,13 +1,15 @@
-// File: src/pages/Feed.js
-import React from 'react';
+import React, { useState } from 'react';
 import BucketItem from '../components/BucketItem';
+import sampleData from '../data/sampleData';
+import { handleComplete, handleRSVP } from '../util/BucketListHelper';
 
-export default function Feed({ friends, user, onRSVP }) {
+export default function Feed({user, friends, setFriends, bucketList, setBucketList}) {
+
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">Friend Feed</h2>
+      <h2 className="page_header">Friend Feed</h2>
 
-      {friends.map(friend => (
+      {friends.map((friend) => (
         <div key={friend.id} className="mb-6">
           <div className="flex items-center mb-3">
             <img
@@ -18,14 +20,17 @@ export default function Feed({ friends, user, onRSVP }) {
             <h3 className="font-medium">{friend.name}'s Goals</h3>
           </div>
 
-          {friend.bucketList.map(item => (
+          {friend.bucketList?.map((item) => (
             <BucketItem
               key={item.id}
               item={item}
               friend={friend}
-              user={user}
+              currentUser={user}
               showRSVP={true}
-              onRSVP={onRSVP}
+              onRSVP={(friendId, itemId) =>
+                handleRSVP(friendId, itemId, user, setFriends)
+              }
+              onComplete={(itemId) => handleComplete(itemId, setBucketList)} 
             />
           ))}
         </div>
