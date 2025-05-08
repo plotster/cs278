@@ -11,16 +11,21 @@ import './styles/global.css'
 
 const App = () => {
   return (
-    <>
-      <Header user={sampleData.user} />
-      <Router>
-        <Routes>
-          <Route path="/" element={<BucketList goals={sampleData.bucketList} />} />
-          <Route path="/completed" element={<CompletedGoals goals={sampleData.bucketList} />} />
-          <Route path="/feed" element={<Feed friends={sampleData.friends} user={sampleData.user} />} />
-        </Routes>
-      </Router>
-    </>
+    <div className="app-container">
+      <div className="header-container">
+        <Header user={sampleData.user} />
+      </div>
+
+      <div className="content-container">
+        <Router>
+          <Routes>
+            <Route path="/" element={<BucketList goals={sampleData.bucketList} />} />
+            <Route path="/completed" element={<CompletedGoals goals={sampleData.bucketList} />} />
+            <Route path="/feed" element={<Feed user={sampleData.user} />} />
+          </Routes>
+        </Router>
+      </div>
+    </div>
   );
 };
 
