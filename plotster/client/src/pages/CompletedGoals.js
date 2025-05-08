@@ -1,8 +1,6 @@
 // File: src/pages/CompletedGoals.js
 import React from 'react';
 import CompletedGoal from '../components/CompletedGoal';
-import Header from '../components/Header';
-import sampleData from '../data/sampleData';
 
 export default function CompletedGoals({ goals }) {
   const completedGoals = goals.filter(goal => goal.completed);

@@ -1,11 +1,11 @@
 // File: src/pages/BucketList.js
 import React from 'react';
 import BucketItem from '../components/BucketItem';
-import { handleComplete, handleRSVP } from '../util/BucketListHelper';
+import { handleComplete } from '../util/BucketListHelper';
 
 const BucketList = ({ goals, setBucketList }) => {
   const incompleteGoals = goals.filter(item => !item.completed);
-  const completedGoals = goals.filter(item => item.completed);
+  // const completedGoals = goals.filter(item => item.completed);
 
   return (
     <div>
