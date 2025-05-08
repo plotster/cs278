@@ -10,6 +10,12 @@ import sampleData from './data/sampleData';
 import './styles/global.css'
 
 const App = () => {
+  const [bucketList, setBucketList] = useState(sampleData.bucketList);
+  const [friends, setFriends] = useState(sampleData.friends);
+  // const [notifications, setNotifications] = useState(sampleNotifications);
+  // const [activeTab, setActiveTab] = useState('bucket');
+  // const [showNotifications, setShowNotifications] = useState(false);
+
   return (
     <div className="app-container">
       <div className="header-container">
@@ -19,9 +25,9 @@ const App = () => {
       <div className="content-container">
         <Router>
           <Routes>
-            <Route path="/" element={<BucketList goals={sampleData.bucketList} />} />
-            <Route path="/completed" element={<CompletedGoals goals={sampleData.bucketList} />} />
-            <Route path="/feed" element={<Feed user={sampleData.user} />} />
+            <Route path="/" element={<BucketList goals={bucketList} setBucketList={setBucketList}/>} />
+            <Route path="/completed" element={<CompletedGoals goals={bucketList} />} />
+            <Route path="/feed" element={<Feed user={sampleData.user} friends={friends} setFriends={setFriends} bucketList={bucketList} setBucketList={setBucketList}/>} />
           </Routes>
         </Router>
       </div>

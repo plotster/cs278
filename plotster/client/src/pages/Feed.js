@@ -3,13 +3,7 @@ import BucketItem from '../components/BucketItem';
 import sampleData from '../data/sampleData';
 import { handleComplete, handleRSVP } from '../util/BucketListHelper';
 
-export default function Feed({user}) {
-
-  const [bucketList, setBucketList] = useState(sampleData.bucketList);
-  const [friends, setFriends] = useState(sampleData.friends);
-  // const [notifications, setNotifications] = useState(sampleNotifications);
-  // const [activeTab, setActiveTab] = useState('bucket');
-  // const [showNotifications, setShowNotifications] = useState(false);
+export default function Feed({user, friends, setFriends, bucketList, setBucketList}) {
 
   return (
     <div>

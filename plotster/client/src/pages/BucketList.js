@@ -3,7 +3,7 @@ import React from 'react';
 import BucketItem from '../components/BucketItem';
 import { handleComplete, handleRSVP } from '../util/BucketListHelper';
 
-const BucketList = ({ goals, onComplete }) => {
+const BucketList = ({ goals, setBucketList }) => {
   const incompleteGoals = goals.filter(item => !item.completed);
   const completedGoals = goals.filter(item => item.completed);
 
@@ -21,7 +21,7 @@ const BucketList = ({ goals, onComplete }) => {
 
       {incompleteGoals.length > 0 ? (
         incompleteGoals.map(item => (
-          <BucketItem key={item.id} item={item} onComplete={handleComplete} />
+          <BucketItem key={item.id} item={item} onComplete={(itemId) => handleComplete(itemId, setBucketList)} />
         ))
       ) : (
         <p className="text-gray-500 bg-white p-6 rounded-lg text-center">
