@@ -23,7 +23,7 @@ export default function Feed({ friends, user, onRSVP }) {
                 key={item.id}
                 item={item}
                 friend={friend}
-                user={user}
+                currentUser={user}
                 showRSVP={true}
                 onRSVP={onRSVP}
               />
