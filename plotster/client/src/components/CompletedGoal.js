@@ -10,9 +10,7 @@ const CompletedGoal = ({ item }) => {
 
   return (
     <div className="bg-white rounded-lg border p-4 mb-6">
-      <h3 className="text-lg font-medium text-green-700 mb-2">
-        {item.title}
-      </h3>
+      <h3 className="text-lg font-medium text-green-700 mb-2">{item.title}</h3>
       <div className="flex text-sm text-gray-600 mb-3">
         <div className="mr-4">
           <span className="font-medium">Where:</span> {item.location}
@@ -26,11 +24,11 @@ const CompletedGoal = ({ item }) => {
         <div className="mb-4">
           <p className="text-gray-600 font-medium text-sm">With:</p>
           <div className="flex mt-1">
-            {item.participants.map(person => (
+            {item.participants.map((person) => (
               <div key={person.id} className="flex flex-col items-center mr-3">
-                <img 
-                  src={person.avatar} 
-                  alt={person.name} 
+                <img
+                  src={person.avatar}
+                  alt={person.name}
                   className="w-8 h-8 rounded-full"
                 />
                 <span className="text-xs text-gray-500">{person.name}</span>
