@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Header = ({ user }) => {
     return (
       <header className="header">
