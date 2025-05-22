@@ -2,6 +2,7 @@
 import React, {useState} from 'react';
 import BucketItem from '../components/BucketItem';
 import { handleComplete } from '../util/BucketListHelper';
+import { addGoal } from '../util/BucketListAPI.js';
 
 const BucketList = ({ goals = [], setBucketList }) => {
   const [showForm, setShowForm] = useState(false);
@@ -12,6 +13,7 @@ const BucketList = ({ goals = [], setBucketList }) => {
     location: '',
     completed: false,
     capacity: 0,
+    participants: [],
   });
   const incompleteGoals = goals.filter(item => !item.completed);
   // const completedGoals = goals.filter(item => item.completed);
@@ -20,33 +22,26 @@ const BucketList = ({ goals = [], setBucketList }) => {
     setForm({ ...form, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Add new goal logic here (you can adjust as needed)
+    const newGoal = {
+      title: form.title,
+      description: form.description,
+      date: form.date,
+      location: form.location,
+      completed: false,
+      capacity: form.capacity,
+      participants: []
+    };
+    await addGoal(newGoal); // Add to Firestore
     setBucketList(prev => [
       ...prev,
-      {
-        id: Date.now(),
-        title: form.title,
-        description: form.description,
-        date: form.date,
-        location: form.location,
-        completed: form.completed,
-        capacity: form.capacity,
-      }
+      { id: Date.now(), ...newGoal }
     ]);
-    setShowForm(false);
-    setForm({
-      title: '',
-      description: '',
-      date: '',
-      location: '',
-      completed: false,
-      capacity: 0,
-    });
+    resetForm();
   };
 
-  const cancelButtonClicked = () => {
+  const resetForm = () => {
     setShowForm(false);
     setForm({
       title: '',
@@ -143,7 +138,7 @@ const BucketList = ({ goals = [], setBucketList }) => {
             <div className="flex justify-end space-x-2">
               <button
                 type="button"
-                onClick={() => cancelButtonClicked()}
+                onClick={() => resetForm()}
                 className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
               >
                 Cancel
