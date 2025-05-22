@@ -1,0 +1,7 @@
+10:41:10.667 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+10:41:10.889 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
+10:41:25.131 [NamespaceSystem-akka.actor.default-dispatcher-7] INFO com.firebase.core.namespace.NamespaceActor - plotster successfully activated FBKV (SurveyIdle(0)) wait: 341ms, init: 0ms
+10:44:34.736 [Thread-0] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
+10:44:34.768 [NamespaceSystem-akka.actor.default-dispatcher-6] INFO com.firebase.core.namespace.Terminator$Terminator - 1 actors left to terminate: plotster
+10:44:34.774 [NamespaceSystem-akka.actor.default-dispatcher-10] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for plotster
+10:44:34.778 [Thread-0] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.

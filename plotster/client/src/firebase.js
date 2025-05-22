@@ -4,6 +4,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getDatabase, connectDatabaseEmulator } from "firebase/database";
 // TODO: Add SDKs for Firebase Storage (bc photos and stuff)
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -20,8 +21,13 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
-// TODO: uncomment once we figure out the free credits for Firebase Blaze plan
-// const storage = getStorage(app);
+const db = getDatabase(app);
+
+if (window.location.hostname === "localhost") {
+  connectDatabaseEmulator(db, "localhost", 9000);
+}
+
+export default db;

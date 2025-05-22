@@ -2,6 +2,7 @@
 import React, {useState} from 'react';
 import BucketItem from '../components/BucketItem';
 import { handleComplete } from '../util/BucketListHelper';
+import { addGoal } from '../util/BucketListAPI.js';
 
 const BucketList = ({ goals = [], setBucketList }) => {
   const [showForm, setShowForm] = useState(false);
@@ -20,20 +21,20 @@ const BucketList = ({ goals = [], setBucketList }) => {
     setForm({ ...form, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Add new goal logic here (you can adjust as needed)
+    const newGoal = {
+      title: form.title,
+      description: form.description,
+      date: form.date,
+      location: form.location,
+      completed: form.completed,
+      capacity: form.capacity,
+    };
+    await addGoal(newGoal); // Add to Firestore
     setBucketList(prev => [
       ...prev,
-      {
-        id: Date.now(),
-        title: form.title,
-        description: form.description,
-        date: form.date,
-        location: form.location,
-        completed: form.completed,
-        capacity: form.capacity,
-      }
+      { id: Date.now(), ...newGoal }
     ]);
     setShowForm(false);
     setForm({
