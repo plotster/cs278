@@ -22,11 +22,11 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 const db = getDatabase(app);
 
-if (window.location.hostname === "localhost") {
+if (window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1") {
   connectDatabaseEmulator(db, "localhost", 9000);
 }
 
