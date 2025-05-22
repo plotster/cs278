@@ -13,6 +13,7 @@ const BucketList = ({ goals = [], setBucketList }) => {
     location: '',
     completed: false,
     capacity: 0,
+    participants: [],
   });
   const incompleteGoals = goals.filter(item => !item.completed);
   // const completedGoals = goals.filter(item => item.completed);
@@ -28,26 +29,19 @@ const BucketList = ({ goals = [], setBucketList }) => {
       description: form.description,
       date: form.date,
       location: form.location,
-      completed: form.completed,
+      completed: false,
       capacity: form.capacity,
+      participants: []
     };
     await addGoal(newGoal); // Add to Firestore
     setBucketList(prev => [
       ...prev,
       { id: Date.now(), ...newGoal }
     ]);
-    setShowForm(false);
-    setForm({
-      title: '',
-      description: '',
-      date: '',
-      location: '',
-      completed: false,
-      capacity: 0,
-    });
+    resetForm();
   };
 
-  const cancelButtonClicked = () => {
+  const resetForm = () => {
     setShowForm(false);
     setForm({
       title: '',
@@ -144,7 +138,7 @@ const BucketList = ({ goals = [], setBucketList }) => {
             <div className="flex justify-end space-x-2">
               <button
                 type="button"
-                onClick={() => cancelButtonClicked()}
+                onClick={() => resetForm()}
                 className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
               >
                 Cancel
