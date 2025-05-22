@@ -2,6 +2,16 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Emulator
+
+In order to test our code with the database, we are using Firebase Realtime Database Emulator. Below are the steps:
+
+### `npm run build`
+### `firebase emulators:start`
+
+The Emulator UI is at [http://127.0.0.1:4000/](http://127.0.0.1:4000/).
+The app is at [http://127.0.0.1:5002/](http://127.0.0.1:5002/).
+
 ## Available Scripts
 
 In the project directory, you can run:
