@@ -16,7 +16,7 @@ const BucketItem = ({ item, onComplete, onRSVP, showRSVP = false, friend = null,
             <p className="text-gray-600"><strong>Where:</strong> {item.location}</p>
             <p className="text-gray-600"><strong>When:</strong> {item.date}</p>
 
-            {item.participants.length > 0 && (
+            {item.participants && item.participants.length > 0 && (
               <div className="mt-2">
                 <p className="text-gray-600 font-medium">Who's coming:</p>
                 <div className="flex mt-1">
