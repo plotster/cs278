@@ -11,9 +11,7 @@ const BucketList = ({ goals = [], setBucketList }) => {
     description: '',
     date: '',
     location: '',
-    completed: false,
     capacity: 0,
-    participants: [],
   });
   const incompleteGoals = goals.filter(item => !item.completed);
   // const completedGoals = goals.filter(item => item.completed);
@@ -24,6 +22,8 @@ const BucketList = ({ goals = [], setBucketList }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // create goal
     const newGoal = {
       title: form.title,
       description: form.description,
@@ -31,14 +31,19 @@ const BucketList = ({ goals = [], setBucketList }) => {
       location: form.location,
       completed: false,
       capacity: form.capacity,
-      participants: []
+      participants: [],
+      pictures: [],
     };
-    await addGoal(newGoal); // Add to Firestore
+    
+    // add goal to local state + clear form
     setBucketList(prev => [
       ...prev,
       { id: Date.now(), ...newGoal }
     ]);
     resetForm();
+
+    // add goal to database
+    await addGoal(newGoal);
   };
 
   const resetForm = () => {
