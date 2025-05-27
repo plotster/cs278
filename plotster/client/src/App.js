@@ -10,13 +10,16 @@ import SelectionBar from './components/SelectionBar';
 import sampleData from './data/sampleData';
 import './styles/global.css'
 
+// TODO: replace with real user ID from auth system
+const userId = sampleData.user.id
+
 const App = () => {
-  const [bucketList, setBucketList] = useState(sampleData.bucketList);
+  const [bucketList, setBucketList] = useState([]);
   const [friends, setFriends] = useState(sampleData.friends);
   // const [notifications, setNotifications] = useState(sampleNotifications);
   // const [activeTab, setActiveTab] = useState('bucket');
   // const [showNotifications, setShowNotifications] = useState(false);
-
+  
   return (
     <div className="app-container">
       <div className="header-container">
@@ -29,8 +32,8 @@ const App = () => {
 
       <div className="content-container">
           <Routes>
-            <Route path="/" element={<BucketList goals={bucketList} setBucketList={setBucketList}/>} />
-            <Route path="/completed" element={<CompletedGoals goals={bucketList} />} />
+            <Route path="/" element={<BucketList userId={userId} />} />
+            <Route path="/completed" element={<CompletedGoals userId={userId} />} />
             <Route path="/feed" element={<Feed user={sampleData.user} friends={friends} setFriends={setFriends} bucketList={bucketList} setBucketList={setBucketList}/>} />
           </Routes>
       </div>

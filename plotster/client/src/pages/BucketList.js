@@ -1,22 +1,27 @@
 // File: src/pages/BucketList.js
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import BucketItem from '../components/BucketItem';
-import { handleComplete } from '../util/BucketListHelper';
-import { addGoal } from '../util/BucketListAPI.js';
+import { addGoal, completeGoal, fetchIncompleteGoals } from '../util/BucketListAPI.js';
 
-const BucketList = ({ goals = [], setBucketList }) => {
+const BucketList = ({ userId }) => {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     title: '',
     description: '',
     date: '',
     location: '',
-    completed: false,
     capacity: 0,
-    participants: [],
   });
-  const incompleteGoals = goals.filter(item => !item.completed);
-  // const completedGoals = goals.filter(item => item.completed);
+  const [goals, setGoals] = useState([]);
+
+  // Fetch goals every time the component mounts or userId changes
+  useEffect(() => {
+    const loadGoals = async () => {
+      const fetchedGoals = await fetchIncompleteGoals(userId);
+      setGoals(fetchedGoals);
+    };
+    loadGoals();
+  }, [userId, showForm]); // refetch when userId or showForm changes
 
   const handleChange = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -24,6 +29,8 @@ const BucketList = ({ goals = [], setBucketList }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // create goal
     const newGoal = {
       title: form.title,
       description: form.description,
@@ -31,14 +38,14 @@ const BucketList = ({ goals = [], setBucketList }) => {
       location: form.location,
       completed: false,
       capacity: form.capacity,
-      participants: []
+      participants: [userId],
+      pictures: [],
     };
-    await addGoal(newGoal); // Add to Firestore
-    setBucketList(prev => [
-      ...prev,
-      { id: Date.now(), ...newGoal }
-    ]);
+    
     resetForm();
+    await addGoal(userId, newGoal);
+    const updatedGoals = await fetchIncompleteGoals(userId);
+    setGoals(updatedGoals);
   };
 
   const resetForm = () => {
@@ -154,9 +161,13 @@ const BucketList = ({ goals = [], setBucketList }) => {
         </div>
       )}
 
-      {incompleteGoals.length > 0 ? (
-        incompleteGoals.map(item => (
-          <BucketItem key={item.id} item={item} onComplete={(itemId) => handleComplete(itemId, setBucketList)} />
+      {goals.length > 0 ? (
+        goals.map(item => (
+          <BucketItem key={item.id} item={item} onComplete={async (itemId) => {
+            await completeGoal(userId, itemId);
+            const updatedGoals = await fetchIncompleteGoals(userId);
+            setGoals(updatedGoals);
+          }} />
         ))
       ) : (
         <p className="text-gray-500 bg-white p-6 rounded-lg text-center">

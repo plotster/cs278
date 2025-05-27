@@ -1,9 +1,18 @@
 // File: src/pages/CompletedGoals.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import CompletedGoal from '../components/CompletedGoal';
+import { fetchCompletedGoals } from '../util/BucketListAPI';
 
-export default function CompletedGoals({ goals }) {
-  const completedGoals = goals.filter(goal => goal.completed);
+export default function CompletedGoals({ userId }) {
+  const [completedGoals, setCompletedGoals] = useState([]);
+
+  useEffect(() => {
+    const loadGoals = async () => {
+      const fetchedGoals = await fetchCompletedGoals(userId);
+      setCompletedGoals(fetchedGoals);
+    };
+    loadGoals();
+  }, [userId]);
 
   return (
     <div>
