@@ -1,13 +1,13 @@
-17:25:10.093 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-17:25:10.329 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
-17:25:16.336 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO com.firebase.core.namespace.NamespaceActor - plotster-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 135ms, init: 0ms
-17:25:32.834 [FirebaseWorkerPool-1-2] WARN com.firebase.core.persistence.backend.dummy.EmulatorMetadataPersistence - Multiple projectIds are not recommended in single project mode. Requested 
+16:26:09.964 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+16:26:10.180 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
+16:26:16.168 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO com.firebase.core.namespace.NamespaceActor - plotster-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 139ms, init: 0ms
+16:26:21.884 [FirebaseWorkerPool-1-2] WARN com.firebase.core.persistence.backend.dummy.EmulatorMetadataPersistence - Multiple projectIds are not recommended in single project mode. Requested 
 namespace plotster, but the emulator is configured for plotster-default-rtdb. To 
 opt-out of single project mode add/set the singleProjectMode: false property in 
 the firebase.json emulators config. 
-17:25:32.863 [NamespaceSystem-akka.actor.default-dispatcher-12] INFO com.firebase.core.namespace.NamespaceActor - plotster successfully activated FBKV (SurveyIdle(0)) wait: 9ms, init: 0ms
-17:25:42.195 [Thread-0] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
-17:25:42.220 [NamespaceSystem-akka.actor.default-dispatcher-9] INFO com.firebase.core.namespace.Terminator$Terminator - 2 actors left to terminate: plotster, plotster-default-rtdb
-17:25:42.227 [NamespaceSystem-akka.actor.default-dispatcher-12] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for plotster-default-rtdb
-17:25:42.227 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for plotster
-17:25:42.233 [Thread-0] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.
+16:26:21.911 [NamespaceSystem-akka.actor.default-dispatcher-9] INFO com.firebase.core.namespace.NamespaceActor - plotster successfully activated FBKV (SurveyIdle(0)) wait: 9ms, init: 0ms
+16:26:57.444 [Thread-0] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
+16:26:57.464 [NamespaceSystem-akka.actor.default-dispatcher-8] INFO com.firebase.core.namespace.Terminator$Terminator - 2 actors left to terminate: plotster, plotster-default-rtdb
+16:26:57.471 [NamespaceSystem-akka.actor.default-dispatcher-11] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for plotster
+16:26:57.472 [NamespaceSystem-akka.actor.default-dispatcher-9] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for plotster-default-rtdb
+16:26:57.476 [Thread-0] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.
