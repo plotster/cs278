@@ -3,7 +3,6 @@
 // fun firebase config yay
 
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getDatabase, connectDatabaseEmulator } from "firebase/database";
 // TODO: Add SDKs for Firebase Storage (bc photos and stuff)
 // https://firebase.google.com/docs/web/setup#available-libraries

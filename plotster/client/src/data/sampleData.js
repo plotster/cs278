@@ -1,5 +1,5 @@
 const sampleUser = {
-    id: 1,
+    id: "userId_1",
     name: "Alex Taylor",
     avatar: "https://placekitten.com/100/100",
   };
