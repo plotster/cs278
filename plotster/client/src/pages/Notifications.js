@@ -2,6 +2,7 @@ import React from 'react';
 import NotificationItem from '../components/NotificationItem';
 
 const Notifications = ({ notifications, setNotifications }) => {
+  // TODO: replace with adding these to the feed page
   const handleAccept = (id) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
   };
@@ -12,7 +13,7 @@ const Notifications = ({ notifications, setNotifications }) => {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">Notifications</h2>
+      <h2 className="notifications-header">Notifications</h2>
       {notifications.length > 0 ? (
         notifications.map(notification => (
           <NotificationItem

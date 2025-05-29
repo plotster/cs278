@@ -16,9 +16,6 @@ const userId = sampleData.user.id
 const App = () => {
   const [bucketList, setBucketList] = useState([]);
   const [friends, setFriends] = useState(sampleData.friends);
-  // const [notifications, setNotifications] = useState(sampleNotifications);
-  // const [activeTab, setActiveTab] = useState('bucket');
-  // const [showNotifications, setShowNotifications] = useState(false);
   
   return (
     <div className="app-container">

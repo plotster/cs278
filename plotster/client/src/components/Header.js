@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Notifications from '../pages/Notifications';
-import { fetchAllUsers } from '../util/FriendsAPI'; // Assuming this function fetches all user names
+import { fetchAllUsers, fetchUserNotifications } from '../util/NotificationsAPI'; 
 
-const Header = ({ user, notifications = [], setNotifications, users = [] }) => {
+const Header = ({ user }) => {
+  const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,6 +17,15 @@ const Header = ({ user, notifications = [], setNotifications, users = [] }) => {
     }
     loadUsers();
   }, []);
+
+  // fetching all notifications from the DB
+  useEffect(() => {
+    async function loadNotifs() {
+      const notifications = await fetchUserNotifications(user.id);
+      setNotifications(notifications);
+    }
+    loadNotifs();
+  }, [user.id]);
 
   // Filter users by search term
   // TODO: ensure that when a user create an account, their name is added to the userList
@@ -80,12 +90,12 @@ const Header = ({ user, notifications = [], setNotifications, users = [] }) => {
             </svg>
           </button>
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 bg-white border rounded shadow-lg z-20">
+            <div className="absolute right-0 mt-2 w-90 bg-white border rounded shadow-lg z-20">
               <Notifications notifications={notifications} setNotifications={setNotifications} />
             </div>
           )}
         </div>
-        
+
         {/* User Avatar and Name */}
         <img src={user.avatar} alt={user.name} className="avatar ml-4" />
         <span className="user-name ml-2">{user.name}</span>
