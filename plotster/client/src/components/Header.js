@@ -91,7 +91,7 @@ const Header = ({ user }) => {
           </button>
           {showNotifications && (
             <div className="absolute right-0 mt-2 w-90 bg-white border rounded shadow-lg z-20">
-              <Notifications notifications={notifications} setNotifications={setNotifications} />
+              <Notifications notifications={notifications} setNotifications={setNotifications} userId={user.id}/>
             </div>
           )}
         </div>

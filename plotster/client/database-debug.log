@@ -1,9 +1,9 @@
-11:28:24.926 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-11:28:25.154 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
-11:28:31.044 [NamespaceSystem-akka.actor.default-dispatcher-8] INFO com.firebase.core.namespace.NamespaceActor - plotster successfully activated FBKV (SurveyIdle(0)) wait: 233ms, init: 0ms
-11:28:31.044 [NamespaceSystem-akka.actor.default-dispatcher-7] INFO com.firebase.core.namespace.NamespaceActor - plotster-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 230ms, init: 0ms
-11:30:09.621 [Thread-0] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
-11:30:09.657 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO com.firebase.core.namespace.Terminator$Terminator - 2 actors left to terminate: plotster, plotster-default-rtdb
-11:30:09.667 [NamespaceSystem-akka.actor.default-dispatcher-9] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for plotster
-11:30:09.667 [NamespaceSystem-akka.actor.default-dispatcher-7] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for plotster-default-rtdb
-11:30:09.671 [Thread-0] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.
+14:00:26.095 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+14:00:26.313 [main] INFO com.firebase.server.forge.App$ - Listening at 127.0.0.1:9000
+14:00:40.652 [NamespaceSystem-akka.actor.default-dispatcher-7] INFO com.firebase.core.namespace.NamespaceActor - plotster successfully activated FBKV (SurveyIdle(0)) wait: 244ms, init: 0ms
+14:00:40.652 [NamespaceSystem-akka.actor.default-dispatcher-8] INFO com.firebase.core.namespace.NamespaceActor - plotster-default-rtdb successfully activated FBKV (SurveyIdle(0)) wait: 244ms, init: 0ms
+14:01:22.001 [Thread-0] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
+14:01:22.044 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO com.firebase.core.namespace.Terminator$Terminator - 2 actors left to terminate: plotster, plotster-default-rtdb
+14:01:22.054 [NamespaceSystem-akka.actor.default-dispatcher-6] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for plotster
+14:01:22.054 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for plotster-default-rtdb
+14:01:22.057 [Thread-0] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.

@@ -18,7 +18,6 @@ export async function fetchUserNotifications(userId) {
   const snapshot = await get(child(ref(db), `users/${userId}/notifications`));
   if (snapshot.exists()) {
     const notifications = snapshot.val();
-    console.log("Fetched notifications:", notifications);
     return notifications || {};
   }
   return {};

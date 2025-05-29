@@ -8,7 +8,6 @@ const Notifications = ({ notifications, setNotifications, userId }) => {
     // add sender
     const senderId = notification.sender?.id;
     if (senderId && notification.type === 'friend_request') {
-      console.log(`Adding connection for user ${userId} with sender ${senderId}`);
       await addConnection(userId, String(senderId));
     }
 
