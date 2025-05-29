@@ -1,0 +1,139 @@
+{
+  "users": {
+    "1": {
+      "name": "Alice",
+      "connections": ["2", "3"],
+      "totalGoalsCreated": 2,
+      "items": {
+        "goal_1": {
+          "title": "Visit the Grand Canyon",
+          "description": "Take a trip to see the Grand Canyon in Arizona.",
+          "date": "2025-08-15",
+          "location": "Grand Canyon, AZ",
+          "completed": false,
+          "capacity": 5,
+          "participants": ["1"],
+          "pictures": []
+        },
+        "goal_2": {
+          "title": "Learn to Surf",
+          "description": "Attend a beginner's surfing class at the beach.",
+          "date": "2025-07-10",
+          "location": "Santa Cruz Beach",
+          "completed": false,
+          "capacity": 3,
+          "participants": ["1"],
+          "pictures": []
+        }
+      },
+      "notifications": {
+        "1": {
+          "type": "friend_request",
+          "sender": { "id": 4, "name": "Random Name", "avatar": "https://placekitten.com/104/104" },
+          "time": "2 hours ago"
+        },
+        "2": {
+          "type": "friend_request",
+          "sender": { "id": 5, "name": "Casey Smith", "avatar": "https://placekitten.com/104/104" },
+          "time": "2 hours ago"
+        },
+        "3": {
+          "type": "rsvp",
+          "sender": { "id": 5, "name": "Casey Smith", "avatar": "https://placekitten.com/104/104" },
+          "time": "2 hours ago",
+          "goal": "Go fountain-hopping at campus"
+        }
+      }
+    },
+    "2": {
+      "name": "Bob",
+      "connections": ["1", "3"],
+      "totalGoalsCreated": 2,
+      "items": {
+        "goal_1": {
+          "title": "Visit the Grand Canyon",
+          "description": "Take a trip to see the Grand Canyon in Arizona.",
+          "date": "2025-08-15",
+          "location": "Grand Canyon, AZ",
+          "completed": false,
+          "capacity": 5,
+          "participants": ["1"],
+          "pictures": []
+        },
+        "goal_2": {
+          "title": "Learn to Surf",
+          "description": "Attend a beginner's surfing class at the beach.",
+          "date": "2025-07-10",
+          "location": "Santa Cruz Beach",
+          "completed": false,
+          "capacity": 3,
+          "participants": ["1"],
+          "pictures": []
+        }
+      },
+      "notifications": {
+        "1": {
+          "type": "friend_request",
+          "sender": { "id": 4, "name": "Random Name", "avatar": "https://placekitten.com/104/104" },
+          "time": "2 hours ago"
+        },
+        "2": {
+          "type": "friend_request",
+          "sender": { "id": 5, "name": "Casey Smith", "avatar": "https://placekitten.com/104/104" },
+          "time": "2 hours ago"
+        },
+        "3": {
+          "type": "rsvp",
+          "sender": { "id": 5, "name": "Casey Smith", "avatar": "https://placekitten.com/104/104" },
+          "time": "2 hours ago",
+          "goal": "Go fountain-hopping at campus"
+        }
+      }
+    },
+    "3": {
+      "name": "Candance",
+      "connections": ["2", "1"],
+      "totalGoalsCreated": 2,
+      "items": {
+        "goal_1": {
+          "title": "Visit the Grand Canyon",
+          "description": "Take a trip to see the Grand Canyon in Arizona.",
+          "date": "2025-08-15",
+          "location": "Grand Canyon, AZ",
+          "completed": false,
+          "capacity": 5,
+          "participants": ["1"],
+          "pictures": []
+        },
+        "goal_2": {
+          "title": "Learn to Surf",
+          "description": "Attend a beginner's surfing class at the beach.",
+          "date": "2025-07-10",
+          "location": "Santa Cruz Beach",
+          "completed": false,
+          "capacity": 3,
+          "participants": ["1"],
+          "pictures": []
+        }
+      },
+      "notifications": {
+        "1": {
+          "type": "friend_request",
+          "sender": { "id": 4, "name": "Random Name", "avatar": "https://placekitten.com/104/104" },
+          "time": "2 hours ago"
+        },
+        "2": {
+          "type": "friend_request",
+          "sender": { "id": 5, "name": "Casey Smith", "avatar": "https://placekitten.com/104/104" },
+          "time": "2 hours ago"
+        },
+        "3": {
+          "type": "rsvp",
+          "sender": { "id": 5, "name": "Casey Smith", "avatar": "https://placekitten.com/104/104" },
+          "time": "2 hours ago",
+          "goal": "Go fountain-hopping at campus"
+        }
+      }
+    }
+  }
+}
