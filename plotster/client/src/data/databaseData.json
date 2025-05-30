@@ -16,7 +16,7 @@
           "location": "Grand Canyon, AZ",
           "completed": false,
           "capacity": 5,
-          "participants": ["userId_1"],
+          "participants": {"userId_1": true},
           "pictures": []
         },
         "goal_2": {
@@ -26,7 +26,7 @@
           "location": "Santa Cruz Beach",
           "completed": false,
           "capacity": 3,
-          "participants": ["userId_1"],
+          "participants": {"userId_1": true},
           "pictures": []
         }
       },
@@ -65,7 +65,7 @@
           "location": "Grand Canyon, AZ",
           "completed": false,
           "capacity": 5,
-          "participants": ["userId_1"],
+          "participants": {"userId_2": true},
           "pictures": []
         },
         "goal_2": {
@@ -75,7 +75,7 @@
           "location": "Santa Cruz Beach",
           "completed": false,
           "capacity": 3,
-          "participants": ["userId_1"],
+          "participants": {"userId_2": true},
           "pictures": []
         }
       },
@@ -114,7 +114,7 @@
           "location": "Grand Canyon, AZ",
           "completed": false,
           "capacity": 5,
-          "participants": ["userId_1"],
+          "participants": {"userId_3": true},
           "pictures": []
         },
         "goal_2": {
@@ -124,7 +124,7 @@
           "location": "Santa Cruz Beach",
           "completed": false,
           "capacity": 3,
-          "participants": ["userId_1"],
+          "participants": {"userId_3": true},
           "pictures": []
         }
       },
