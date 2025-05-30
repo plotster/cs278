@@ -36,7 +36,7 @@ const BucketItem = ({ item, onComplete, onRSVP, showRSVP = false, friend = null,
           {!item.completed ? (
             <div className="space-x-2">
               {!showRSVP ? (
-                <button onClick={() => onComplete(item.id)} className="bg-green-500 text-white px-3 py-1 rounded-full text-sm hover:bg-green-600 transition">
+                <button onClick={onComplete} className="bg-green-500 text-white px-3 py-1 rounded-full text-sm hover:bg-green-600 transition">
                   Complete
                 </button>
               ) : (
