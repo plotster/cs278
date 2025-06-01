@@ -4,6 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Domain 
 We are hosting out website using Firebase at: [https://plotster.web.app/](https://plotster.web.app/)
+
 To deploy changes to the website after editing, run `npm run build` followed by `firebase deploy` then refresh the page.
 
 
