@@ -16,11 +16,12 @@ const userId = sampleData.user.id
 const App = () => {
   const [bucketList, setBucketList] = useState([]);
   const [friends, setFriends] = useState(sampleData.friends);
+  const [refetchJoinedGoalsTrigger, setRefetchJoinedGoalsTrigger] = useState(0);
   
   return (
     <div className="app-container">
       <div className="header-container">
-        <Header user={sampleData.user} />
+        <Header user={sampleData.user} setRefetchJoinedGoalsTrigger={setRefetchJoinedGoalsTrigger}/>
       </div>
 
       <div className="selection-container">
@@ -29,7 +30,7 @@ const App = () => {
 
       <div className="content-container">
           <Routes>
-            <Route path="/" element={<BucketList userId={userId} />} />
+            <Route path="/" element={<BucketList userId={userId} refetchJoinedGoalsTrigger={refetchJoinedGoalsTrigger}/>} />
             <Route path="/completed" element={<CompletedGoals userId={userId} />} />
             <Route path="/feed" element={<Feed user={sampleData.user} friends={friends} setFriends={setFriends} bucketList={bucketList} setBucketList={setBucketList}/>} />
           </Routes>

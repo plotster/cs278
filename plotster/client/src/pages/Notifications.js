@@ -2,7 +2,7 @@ import React from 'react';
 import NotificationItem from '../components/NotificationItem';
 import { addConnection, removeNotification, addFriendGoal } from '../util/NotificationsAPI';
 
-const Notifications = ({ notifications, setNotifications, userId }) => {
+const Notifications = ({ notifications, setNotifications, userId, onJoinFriendGoal }) => {
 
   const handleAccept = async (notifKey, notification) => {
     // add sender
@@ -14,6 +14,7 @@ const Notifications = ({ notifications, setNotifications, userId }) => {
     // TODO: add case for RSVP which should add to feed page
     if (senderId && notification.type === 'rsvp') {
       await addFriendGoal(userId, senderId, notification.goalId);
+      if (onJoinFriendGoal) onJoinFriendGoal();  // refetches the friend goals
     }
 
     // remove notification after accepting
