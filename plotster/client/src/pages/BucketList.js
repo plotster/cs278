@@ -204,7 +204,7 @@ const BucketList = ({ userId, refetchJoinedGoalsTrigger }) => {
       
       {/* friend's goals you have joined */}
       <h2 className="page_header mt-8">Friend's Goals You Have Joined</h2>
-      {joinedGoals.length > 0 ? (
+      {joinedGoals.filter(item => !item.completed).length > 0 ? (
         joinedGoals
           .filter(item => !item.completed)  // only show incomplete joined goals
           .map(item => (
@@ -217,7 +217,7 @@ const BucketList = ({ userId, refetchJoinedGoalsTrigger }) => {
           ))
       ) : (
         <p className="text-gray-500 bg-white p-6 rounded-lg text-center">
-          You haven't joined any friend's goals yet.
+          You haven't joined any incomplete friend's goals yet.
         </p>
       )}
     </div>

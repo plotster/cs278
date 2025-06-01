@@ -38,7 +38,7 @@ export async function fetchJoinedFriendsGoals(userId) {
       }
     }
   }
-  
+
   return friendGoals;
 }
 
@@ -49,10 +49,13 @@ export async function fetchIncompleteGoals(userId) {
   return allGoals.filter(goal => !goal.completed);
 }
 
-// fetch only completed goals
+// fetch only completed goals that you or your friends have completed
 export async function fetchCompletedGoals(userId) {
-  const allGoals = await fetchYourGoals(userId);
-  return allGoals.filter(goal => goal.completed);
+  const yourGoals = await fetchYourGoals(userId);
+  const yourCompletedGoals = yourGoals.filter(goal => goal.completed);
+  const joinedFriendsGoals = await fetchJoinedFriendsGoals(userId);
+  const completedFriendGoals = joinedFriendsGoals.filter(goal => goal.completed);
+  return [...yourCompletedGoals, ...completedFriendGoals];
 }
 
 // add a new goal for a user
