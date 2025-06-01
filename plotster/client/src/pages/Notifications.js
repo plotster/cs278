@@ -11,7 +11,7 @@ const Notifications = ({ notifications, setNotifications, userId, onJoinFriendGo
       await addConnection(userId, senderId);
     }
 
-    // TODO: add case for RSVP which should add to feed page
+    // add joined friend goal to bucket list page
     if (senderId && notification.type === 'rsvp') {
       await addFriendGoal(userId, senderId, notification.goalId);
       if (onJoinFriendGoal) onJoinFriendGoal();  // refetches the friend goals

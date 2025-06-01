@@ -205,9 +205,16 @@ const BucketList = ({ userId, refetchJoinedGoalsTrigger }) => {
       {/* friend's goals you have joined */}
       <h2 className="page_header mt-8">Friend's Goals You Have Joined</h2>
       {joinedGoals.length > 0 ? (
-        joinedGoals.map(item => (
-          <BucketItem key={item.id + '-' + item.owner} item={item} friend={{ name: item.owner }} onComplete={() => {}} />
-        ))
+        joinedGoals
+          .filter(item => !item.completed)  // only show incomplete joined goals
+          .map(item => (
+            <BucketItem
+              key={item.id + '-' + item.owner}
+              item={item}
+              friend={{ name: item.owner }}
+              showComplete={false}  // hide complete button for friend's goals
+            />
+          ))
       ) : (
         <p className="text-gray-500 bg-white p-6 rounded-lg text-center">
           You haven't joined any friend's goals yet.
