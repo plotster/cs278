@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Notifications from '../pages/Notifications';
 import { fetchAllUsers, fetchUserNotifications } from '../util/NotificationsAPI'; 
 
-const Header = ({ user }) => {
+const Header = ({ user, setRefetchJoinedGoalsTrigger }) => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -91,7 +91,7 @@ const Header = ({ user }) => {
           </button>
           {showNotifications && (
             <div className="absolute right-0 mt-2 w-90 bg-white border rounded shadow-lg z-20">
-              <Notifications notifications={notifications} setNotifications={setNotifications} userId={user.id}/>
+              <Notifications notifications={notifications} setNotifications={setNotifications} userId={user.id} onJoinFriendGoal={() => setRefetchJoinedGoalsTrigger(t => t + 1)}/>
             </div>
           )}
         </div>

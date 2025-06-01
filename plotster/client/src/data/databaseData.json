@@ -16,7 +16,7 @@
           "location": "Grand Canyon, AZ",
           "completed": false,
           "capacity": 5,
-          "participants": ["userId_1"],
+          "participants": {"userId_1": true},
           "pictures": []
         },
         "goal_2": {
@@ -26,7 +26,7 @@
           "location": "Santa Cruz Beach",
           "completed": false,
           "capacity": 3,
-          "participants": ["userId_1"],
+          "participants": {"userId_1": true},
           "pictures": []
         }
       },
@@ -43,9 +43,10 @@
         },
         "notif_3": {
           "type": "rsvp",
-          "sender": { "id": "userId_5", "name": "Casey Smith", "avatar": "https://placekitten.com/104/104" },
+          "sender": { "id": "userId_2", "name": "Bob", "avatar": "https://placekitten.com/104/104" },
           "time": "2 hours ago",
-          "goal": "Go fountain-hopping at campus"
+          "goalId": "goal_1",
+          "goalTitle": "Visit the Grand Canyon"
         }
       }
     },
@@ -65,7 +66,7 @@
           "location": "Grand Canyon, AZ",
           "completed": false,
           "capacity": 5,
-          "participants": ["userId_1"],
+          "participants": {"userId_2": true},
           "pictures": []
         },
         "goal_2": {
@@ -75,27 +76,11 @@
           "location": "Santa Cruz Beach",
           "completed": false,
           "capacity": 3,
-          "participants": ["userId_1"],
+          "participants": {"userId_2": true},
           "pictures": []
         }
       },
       "notifications": {
-        "notif_1": {
-          "type": "friend_request",
-          "sender": { "id": "userId_4", "name": "Random Name", "avatar": "https://placekitten.com/104/104" },
-          "time": "2 hours ago"
-        },
-        "notif_2": {
-          "type": "friend_request",
-          "sender": { "id": "userId_5", "name": "Casey Smith", "avatar": "https://placekitten.com/104/104" },
-          "time": "2 hours ago"
-        },
-        "notif_3": {
-          "type": "rsvp",
-          "sender": { "id": "userId_5", "name": "Casey Smith", "avatar": "https://placekitten.com/104/104" },
-          "time": "2 hours ago",
-          "goal": "Go fountain-hopping at campus"
-        }
       }
     },
     "userId_3": {
@@ -114,7 +99,7 @@
           "location": "Grand Canyon, AZ",
           "completed": false,
           "capacity": 5,
-          "participants": ["userId_1"],
+          "participants": {"userId_3": true},
           "pictures": []
         },
         "goal_2": {
@@ -124,27 +109,11 @@
           "location": "Santa Cruz Beach",
           "completed": false,
           "capacity": 3,
-          "participants": ["userId_1"],
+          "participants": {"userId_3": true},
           "pictures": []
         }
       },
       "notifications": {
-        "notif_1": {
-          "type": "friend_request",
-          "sender": { "id": "userId_4", "name": "Random Name", "avatar": "https://placekitten.com/104/104" },
-          "time": "2 hours ago"
-        },
-        "notif_2": {
-          "type": "friend_request",
-          "sender": { "id": "userId_5", "name": "Casey Smith", "avatar": "https://placekitten.com/104/104" },
-          "time": "2 hours ago"
-        },
-        "notif_3": {
-          "type": "rsvp",
-          "sender": { "id": "userId_5", "name": "Casey Smith", "avatar": "https://placekitten.com/104/104" },
-          "time": "2 hours ago",
-          "goal": "Go fountain-hopping at campus"
-        }
       }
     }
   }
