@@ -95,14 +95,14 @@ export async function updateGoalParticipants(ownerId, goalId, currentUserId) {
   const participants = snapshot.val() || {};
 
   if (participants[currentUserId]) {
-    // User is currently a participant, so remove them
+    // user is currently a participant, so remove them
     await set(child(goalParticipantsRef, currentUserId), null);
-    await set(userJoinedGoalRef, null); // Also remove from their joined list
+    await set(userJoinedGoalRef, null);
     console.log(`User ${currentUserId} removed from goal ${goalId} and their joined list`);
   } else {
-    // User is not a participant, so add them
+    // user is not a participant, so add them
     await update(goalParticipantsRef, { [currentUserId]: true });
-    await set(userJoinedGoalRef, true); // Also add to their joined list
+    await set(userJoinedGoalRef, true); 
     console.log(`User ${currentUserId} added to goal ${goalId} and their joined list`);
   }
 }

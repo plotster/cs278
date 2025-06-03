@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Notifications from '../pages/Notifications';
 import { fetchAllUsers, fetchUserNotifications } from '../util/NotificationsAPI'; 
 
-// user prop might be null initially, userId is the fallback for critical operations
+// user prop might be null initially, userId is fallback
 const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
   const [notifications, setNotifications] = useState({});
   const [showNotifications, setShowNotifications] = useState(false);
@@ -31,12 +31,12 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
     }
   }, [userId]);
 
-  // Filter users by search term
+  // filter users by search term
   const filteredUsers = userList.filter(u =>
     u.name && u.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Display name and avatar if user data is loaded, otherwise fallback or hide
+  // display name and avatar if user data is loaded, otherwise fallback or hide
   const userName = user ? user.name : 'Loading...';
   const userAvatar = user ? user.avatar : 'default_avatar.png'; // Provide a path to a default avatar
 
@@ -111,7 +111,6 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
           </>
         ) : (
           <>
-            {/* You might want a placeholder avatar or loading text */}
             <div className="avatar ml-4 w-10 h-10 bg-gray-300 rounded-full"></div> 
             <span className="user-name ml-2">Loading...</span>
           </>

@@ -16,7 +16,7 @@ const BucketList = ({ userId, refetchJoinedGoalsTrigger }) => {
   const [joinedGoals, setJoinedGoals] = useState([]);
   const [showCongrats, setShowCongrats] = useState(false);
 
-  // Fetch goals every time the component mounts or userId changes
+  // fetch goals every time the component mounts or userId changes
   useEffect(() => {
     const loadGoals = async () => {
       const fetchedGoals = await fetchIncompleteGoals(userId);
