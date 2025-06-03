@@ -1,0 +1,120 @@
+{
+  "users": {
+    "userId_1": {
+      "name": "Alice",
+      "connections": {
+        "userId_2": true,
+        "userId_3": true
+      },
+      "totalGoalsCreated": 2,
+      "totalNotificationsReceived": 3,
+      "items": {
+        "goal_1": {
+          "title": "Visit the Grand Canyon",
+          "description": "Take a trip to see the Grand Canyon in Arizona.",
+          "date": "2025-08-15",
+          "location": "Grand Canyon, AZ",
+          "completed": false,
+          "capacity": 5,
+          "participants": {"userId_1": true},
+          "pictures": []
+        },
+        "goal_2": {
+          "title": "Learn to Surf",
+          "description": "Attend a beginner's surfing class at the beach.",
+          "date": "2025-07-10",
+          "location": "Santa Cruz Beach",
+          "completed": false,
+          "capacity": 3,
+          "participants": {"userId_1": true},
+          "pictures": []
+        }
+      },
+      "notifications": {
+        "notif_1": {
+          "type": "friend_request",
+          "sender": { "id": "userId_4", "name": "Random Name", "avatar": "https://placekitten.com/104/104" },
+          "time": "2 hours ago"
+        },
+        "notif_2": {
+          "type": "friend_request",
+          "sender": { "id": "userId_5", "name": "Casey Smith", "avatar": "https://placekitten.com/104/104" },
+          "time": "2 hours ago"
+        },
+        "notif_3": {
+          "type": "rsvp",
+          "sender": { "id": "userId_2", "name": "Bob", "avatar": "https://placekitten.com/104/104" },
+          "time": "2 hours ago",
+          "goalId": "goal_1",
+          "goalTitle": "Visit the Grand Canyon"
+        }
+      }
+    },
+    "userId_2": {
+      "name": "Bob",
+      "connections": {
+        "userId_1": true,
+        "userId_3": true
+      },
+      "totalGoalsCreated": 2,
+      "totalNotificationsReceived": 3,
+      "items": {
+        "goal_1": {
+          "title": "Visit the Grand Canyon",
+          "description": "Take a trip to see the Grand Canyon in Arizona.",
+          "date": "2025-08-15",
+          "location": "Grand Canyon, AZ",
+          "completed": false,
+          "capacity": 5,
+          "participants": {"userId_2": true},
+          "pictures": []
+        },
+        "goal_2": {
+          "title": "Learn to Surf",
+          "description": "Attend a beginner's surfing class at the beach.",
+          "date": "2025-07-10",
+          "location": "Santa Cruz Beach",
+          "completed": false,
+          "capacity": 3,
+          "participants": {"userId_2": true},
+          "pictures": []
+        }
+      },
+      "notifications": {
+      }
+    },
+    "userId_3": {
+      "name": "Candance",
+      "connections": {
+        "userId_2": true,
+        "userId_1": true
+      },
+      "totalGoalsCreated": 2,
+      "totalNotificationsReceived": 3,
+      "items": {
+        "goal_1": {
+          "title": "Visit the Grand Canyon",
+          "description": "Take a trip to see the Grand Canyon in Arizona.",
+          "date": "2025-08-15",
+          "location": "Grand Canyon, AZ",
+          "completed": false,
+          "capacity": 5,
+          "participants": {"userId_3": true},
+          "pictures": []
+        },
+        "goal_2": {
+          "title": "Learn to Surf",
+          "description": "Attend a beginner's surfing class at the beach.",
+          "date": "2025-07-10",
+          "location": "Santa Cruz Beach",
+          "completed": false,
+          "capacity": 3,
+          "participants": {"userId_3": true},
+          "pictures": []
+        }
+      },
+      "notifications": {
+      }
+    }
+  }
+}

@@ -6,3 +6,8 @@ namespace plotster, but the emulator is configured for plotster-default-rtdb. To
 opt-out of single project mode add/set the singleProjectMode: false property in 
 the firebase.json emulators config. 
 22:36:36.682 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO com.firebase.core.namespace.NamespaceActor - plotster successfully activated FBKV (SurveyIdle(0)) wait: 3ms, init: 0ms
+00:17:45.006 [Thread-0] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
+00:17:45.020 [NamespaceSystem-akka.actor.default-dispatcher-229] INFO com.firebase.core.namespace.Terminator$Terminator - 2 actors left to terminate: plotster, plotster-default-rtdb
+00:17:45.023 [NamespaceSystem-akka.actor.default-dispatcher-225] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for plotster-default-rtdb
+00:17:45.023 [NamespaceSystem-akka.actor.default-dispatcher-228] INFO com.firebase.core.namespace.NamespaceActor - stopped namespace actor for plotster
+00:17:45.027 [Thread-0] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.

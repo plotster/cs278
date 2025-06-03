@@ -4,7 +4,7 @@ import BucketItem from '../components/BucketItem';
 import { handleComplete, handleRSVP } from '../util/BucketListHelper';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "./Feed.css";
+import "../styles/Feed.css";
 
 export default function Feed({user, friends, setFriends, bucketList, setBucketList}) {
   const settings = {
