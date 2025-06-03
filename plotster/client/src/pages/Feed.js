@@ -8,10 +8,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/feed.css";
 
-export default function Feed({user, friends, setFriends, bucketList, setBucketList, setRefetchJoinedGoalsTrigger}) {
+export default function Feed({user, friends, setFriends, bucketList, setBucketList, refetchJoinedGoalsTrigger, setRefetchJoinedGoalsTrigger}) {
   const sliderRef = useRef(null);
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [previousFeedEventsLength, setPreviousFeedEventsLength] = useState(0);
+  const [sliderKey, setSliderKey] = useState(0);
 
   const settings = {
     dots: true,
@@ -23,7 +22,6 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
     adaptiveHeight: true,
     useCSS: true,
     waitForAnimate: false,
-    afterChange: (index) => setCurrentSlideIndex(index)
   };
 
   const [feedEvents, setFeedEvents] = useState([]);
@@ -50,16 +48,17 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
     } else {
         setAllUsersMap({});
     }
-  }, [user?.id]);
+  }, [user]);
 
   useEffect(() => {
     const generateAndSetFeedEvents = async () => {
       if (!user || !friends || Object.keys(allUsersMap).length === 0) {
         if (Object.keys(allUsersMap).length > 0 || (user && friends && friends.length === 0)) {
           setFeedEvents([]);
+          setSliderKey(prevKey => prevKey + 1);
           setIsLoading(false);
         } else {
-            setIsLoading(true); 
+            setIsLoading(true);
         }
         return;
       }
@@ -162,28 +161,12 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
       // Sort events, for example, by item date if available, or just keep as collected
       // collectedEvents.sort((a, b) => new Date(b.actualItem.date) - new Date(a.actualItem.date)); // Example sort
       setFeedEvents(collectedEvents);
+      setSliderKey(prevKey => prevKey + 1);
       setIsLoading(false);
     };
 
     generateAndSetFeedEvents();
-  }, [user, friends, allUsersMap]);
-
-  useEffect(() => {
-    if (sliderRef.current &&
-        feedEvents.length > 0 &&
-        feedEvents.length < previousFeedEventsLength
-    ) {
-        const newTargetIndex = Math.min(currentSlideIndex, feedEvents.length - 1);
-        setTimeout(() => {
-            if (sliderRef.current) {
-                sliderRef.current.slickGoTo(Math.max(0, newTargetIndex));
-            }
-        }, 0);
-    }
-
-    setPreviousFeedEventsLength(feedEvents.length);
-
-}, [feedEvents, currentSlideIndex, previousFeedEventsLength]);
+  }, [user, friends, allUsersMap, refetchJoinedGoalsTrigger]);
 
   if (isLoading) {
     return (
@@ -192,7 +175,7 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
       </div>
     );
   }
-
+  
   return (
     <div className="feed-container max-w-3xl mx-auto px-4">
       <h2 className="page_header mb-8">Friend Feed</h2>
@@ -213,8 +196,8 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
                 />
                 <h3 className="font-medium">
                   {feedEvents[0].type === 'OWNER_GOAL'
-                    ? `${feedEvents[0].mainPersonForHeader.name}\'s Goal`
-                    : `${feedEvents[0].mainPersonForHeader.name} joined ${feedEvents[0].actualOwner.name}\'s Goal`}
+                    ? `${feedEvents[0].mainPersonForHeader.name}'s Goal`
+                    : `${feedEvents[0].mainPersonForHeader.name} joined ${feedEvents[0].actualOwner.name}'s Goal`}
                 </h3>
               </div>
               <BucketItem
@@ -236,13 +219,22 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
                     setFeedEvents(prevEvents =>
                       prevEvents.filter(e => e.key !== feedEvents[0].key)
                     );
+                    setSliderKey(prevKey => prevKey + 1);
                   }
                 }}
-                onComplete={() => handleComplete(feedEvents[0].actualItem.id, setBucketList)}
+                onComplete={() => {
+                  const itemId = feedEvents[0].actualItem.id;
+                  const itemKey = feedEvents[0].key;
+                  handleComplete(itemId, setBucketList);
+                  setFeedEvents(prevEvents =>
+                    prevEvents.filter(e => e.key !== itemKey)
+                  );
+                  setSliderKey(prevKey => prevKey + 1);
+                }}
               />
             </div>
           ) : (
-            <Slider ref={sliderRef} {...settings} infinite={feedEvents.length > settings.slidesToShow}>
+            <Slider ref={sliderRef} {...settings} infinite={feedEvents.length > settings.slidesToShow} key={sliderKey}>
               {feedEvents.map((event) => (
                 <div key={event.key} className="carousel-slide px-4">
                   <div className="flex items-center mb-4">
@@ -273,12 +265,32 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
                         if (setRefetchJoinedGoalsTrigger) {
                           setRefetchJoinedGoalsTrigger(t => t + 1);
                         }
+                        const itemKeyToRemove = event.key;
                         setFeedEvents(prevEvents => 
-                          prevEvents.filter(e => e.key !== event.key)
+                          prevEvents.filter(e => e.key !== itemKeyToRemove)
                         );
+                        setSliderKey(prevKey => prevKey + 1);
+                        setTimeout(() => {
+                          if (sliderRef.current) {
+                            sliderRef.current.slickGoTo(0, true);
+                          }
+                        }, 0);
                       }
                     }}
-                    onComplete={() => handleComplete(event.actualItem.id, setBucketList)}
+                    onComplete={() => {
+                      const itemId = event.actualItem.id;
+                      const itemKeyToRemove = event.key;
+                      handleComplete(itemId, setBucketList);
+                      setFeedEvents(prevEvents =>
+                        prevEvents.filter(e => e.key !== itemKeyToRemove)
+                      );
+                      setSliderKey(prevKey => prevKey + 1);
+                      setTimeout(() => {
+                        if (sliderRef.current) {
+                          sliderRef.current.slickGoTo(0, true);
+                        }
+                      }, 0);
+                    }}
                   />
                 </div>
               ))}

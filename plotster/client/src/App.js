@@ -46,7 +46,7 @@ const App = () => {
       }
     };
     loadCurrentUser();
-  }, [userId]);
+  }, []);
 
   // Determine friends list once current user and all users are loaded
   useEffect(() => {
@@ -85,6 +85,7 @@ const App = () => {
                   bucketList={bucketList}
                   setBucketList={setBucketList} 
                   setRefetchJoinedGoalsTrigger={setRefetchJoinedGoalsTrigger}
+                  refetchJoinedGoalsTrigger={refetchJoinedGoalsTrigger}
                 />
               )} 
             />
