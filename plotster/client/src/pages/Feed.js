@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
 import BucketItem from '../components/BucketItem';
 import { handleComplete, handleRSVP } from '../util/BucketListHelper';
+import { fetchIncompleteGoals, fetchJoinedFriendsGoals } from '../util/BucketListAPI';
+import { fetchAllUsers } from '../util/NotificationsAPI';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "../styles/Feed.css";
+import "../styles/feed.css";
 
 export default function Feed({user, friends, setFriends, bucketList, setBucketList}) {
   const settings = {
@@ -20,61 +22,145 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
     waitForAnimate: false
   };
 
-  // generate feed events: friend's goals and items friends have joined
-  const feedEvents = [];
+  const [feedEvents, setFeedEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [allUsersMap, setAllUsersMap] = useState({});
 
-  // helper to create a map of all items owned by friends for efficient lookup.
-  // the map stores: itemId -> { item: BucketListItem, owner: FriendObject }
-  const allKnownItemsMap = new Map();
-  friends.forEach(friendAsOwner => {
-    friendAsOwner.bucketList?.forEach(item => {
-      if (!allKnownItemsMap.has(item.id)) {
-        allKnownItemsMap.set(item.id, { item, owner: friendAsOwner });
+  useEffect(() => {
+    const loadAllUsers = async () => {
+      try {
+        const usersArray = await fetchAllUsers();
+        const usersMap = usersArray.reduce((acc, u) => {
+          if (u && u.id) acc[u.id] = u;
+          return acc;
+        }, {});
+        setAllUsersMap(usersMap);
+      } catch (error) {
+        console.error("Error fetching all users:", error);
+        setAllUsersMap({});
       }
-    });
-  });
+    };
 
-  // type 1: Friend's own bucket list items
-  friends.forEach(ownerFriend => {
-    ownerFriend.bucketList?.forEach(item => {
-      feedEvents.push({
-        key: `owner-${ownerFriend.id}-item-${item.id}`,
-        type: 'OWNER_GOAL',
-        mainPersonForHeader: ownerFriend, // Friend whose goal it is
-        actualItem: item,                 // The item itself
-        actualOwner: ownerFriend,         // The owner of the item
-        // If item.createdAt exists, it could be used for sorting later:
-        // timestamp: item.createdAt 
-      });
-    });
-  });
+    if (user && user.id) {
+        loadAllUsers();
+    } else {
+        setAllUsersMap({});
+    }
+  }, [user?.id]);
 
-  // type 2: Items friends have joined
-  // iterates through all known items (owned by user's friends)
-  // and checks if other friends of the user have RSVP'd to them.
-  allKnownItemsMap.forEach(({ item, owner }) => { // item is the BList item, owner is its owner
-    item.rsvps?.forEach(rsvpUserInfo => { // Assume rsvpUserInfo is { userId: '...' } or just a userId string
-      const rsvpUserId = typeof rsvpUserInfo === 'string' ? rsvpUserInfo : rsvpUserInfo.id;
-      const friendWhoJoined = friends.find(f => f.id === rsvpUserId);
-
-      if (friendWhoJoined && friendWhoJoined.id !== owner.id) {
-        // friendWhoJoined (a friend of user) joined 'item' (owned by 'owner', also a friend of user)
-        feedEvents.push({
-          key: `joined-${friendWhoJoined.id}-item-${item.id}`,
-          type: 'FRIEND_JOINED',
-          mainPersonForHeader: friendWhoJoined, // Friend who performed the RSVP action
-          actualItem: item,                   // The item that was joined
-          actualOwner: owner,                 // The actual owner of the item
-          // If rsvpUserInfo.timestamp exists, it could be used for sorting:
-          // timestamp: rsvpUserInfo.timestamp 
-        });
+  useEffect(() => {
+    const generateAndSetFeedEvents = async () => {
+      if (!user || !friends || Object.keys(allUsersMap).length === 0) {
+        if (Object.keys(allUsersMap).length > 0 || (user && friends && friends.length === 0)) {
+          setFeedEvents([]);
+          setIsLoading(false);
+        } else {
+            setIsLoading(true); 
+        }
+        return;
       }
-    });
-  });
 
-  // sort feedEvents by a timestamp if available and desired.
-  // feedEvents.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-  // without sorting, items will appear grouped by type (all owner goals, then all joined events)
+      setIsLoading(true);
+      const collectedEvents = [];
+      
+      const getUserObject = (userId) => {
+        return allUsersMap[userId] || { id: userId, name: 'Unknown', avatar: 'https://placekitten.com/100/100' };
+      };
+
+      for (const friend of friends) {
+        if (!friend || !friend.id) continue;
+
+        // 1. Friend's incomplete bucket list items (owned by friend)
+        try {
+          const incompleteItems = await fetchIncompleteGoals(friend.id);
+          incompleteItems.forEach(originalItem => {
+            if (originalItem && originalItem.id) {
+              let processedParticipants = [];
+              if (originalItem.participants && typeof originalItem.participants === 'object' && !Array.isArray(originalItem.participants)) {
+                processedParticipants = Object.keys(originalItem.participants)
+                  .filter(participantId => originalItem.participants[participantId] === true) // Ensure they are actual participants
+                  .map(participantId => getUserObject(participantId));
+              } else if (Array.isArray(originalItem.participants)) {
+                processedParticipants = originalItem.participants.map(p_or_id => 
+                  typeof p_or_id === 'string' ? getUserObject(p_or_id) : (p_or_id && typeof p_or_id === 'object' && p_or_id.id ? p_or_id : null)
+                ).filter(p => p !== null);
+              } else {
+                // Default to empty array if participants is undefined or an unexpected type
+                processedParticipants = [];
+              }
+
+              const actualItem = {
+                ...originalItem,
+                participants: processedParticipants
+              };
+
+              collectedEvents.push({
+                key: `${friend.id}-${actualItem.id}-owner`,
+                type: 'OWNER_GOAL',
+                mainPersonForHeader: friend,
+                actualOwner: friend,
+                actualItem: actualItem, 
+              });
+            }
+          });
+        } catch (error) {
+          console.error("Error fetching incomplete goals for friend:", friend.id, error);
+        }
+
+        // 2. Items this friend has joined from other people's lists
+        try {
+          const joinedItems = await fetchJoinedFriendsGoals(friend.id);
+          joinedItems.forEach(originalItem => { 
+            if (originalItem && originalItem.id && originalItem.owner) {
+              const ownerObject = getUserObject(originalItem.owner);
+              let processedParticipants = [];
+              if (originalItem.participants && typeof originalItem.participants === 'object' && !Array.isArray(originalItem.participants)) {
+                processedParticipants = Object.keys(originalItem.participants)
+                  .filter(participantId => originalItem.participants[participantId] === true)
+                  .map(participantId => getUserObject(participantId));
+              } else if (Array.isArray(originalItem.participants)) {
+                processedParticipants = originalItem.participants.map(p_or_id => 
+                  typeof p_or_id === 'string' ? getUserObject(p_or_id) : (p_or_id && typeof p_or_id === 'object' && p_or_id.id ? p_or_id : null)
+                ).filter(p => p !== null);
+              } else {
+                processedParticipants = [];
+              }
+              
+              const actualItem = {
+                ...originalItem,
+                participants: processedParticipants
+              };
+
+              collectedEvents.push({
+                key: `${friend.id}-${actualItem.id}-joined-${originalItem.owner}`,
+                type: 'JOINED_GOAL', 
+                mainPersonForHeader: friend, 
+                actualOwner: ownerObject,    
+                actualItem: actualItem, // Use the processed item
+              });
+            }
+          });
+        } catch (error) {
+          console.error("Error fetching joined goals for friend:", friend.id, error);
+        }
+      }
+      
+      // Sort events, for example, by item date if available, or just keep as collected
+      // collectedEvents.sort((a, b) => new Date(b.actualItem.date) - new Date(a.actualItem.date)); // Example sort
+      setFeedEvents(collectedEvents);
+      setIsLoading(false);
+    };
+
+    generateAndSetFeedEvents();
+  }, [user, friends, allUsersMap]);
+
+  if (isLoading) {
+    return (
+      <div className="feed-container max-w-3xl mx-auto px-4 text-center py-10">
+        <p className="text-xl text-gray-500">Loading friend feed...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="feed-container max-w-3xl mx-auto px-4">
@@ -103,7 +189,7 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
                 </div>
                 <BucketItem
                   item={event.actualItem}
-                  friend={event.actualOwner} // BucketItem's 'friend' prop expects the owner
+                  friend={event.actualOwner}
                   currentUser={user}
                   showRSVP={true}
                   onRSVP={() =>

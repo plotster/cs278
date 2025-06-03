@@ -1,28 +1,63 @@
-import { getDatabase, ref, set, get, child, update } from "firebase/database";
+import { getDatabase, ref, set, get, child, update, onValue, off } from "firebase/database";
 import { app } from "../firebase";
 
 const db = getDatabase(app);
 
 // fetch all goals for a user
-export async function fetchGoals(userId) {
+export async function fetchYourGoals(userId) {
   const snapshot = await get(child(ref(db), `users/${userId}/items`));
   if (snapshot.exists()) {
     const items = snapshot.val();
-    return Object.entries(items).map(([id, data]) => ({ id, ...data }));
+    // ensure items is an object before calling Object.entries
+    if (typeof items === 'object' && items !== null) {
+      return Object.entries(items).map(([id, data]) => ({ id, ...data }));
+    }
   }
   return [];
 }
 
+export async function fetchJoinedFriendsGoals(userId) {
+  const dbRef = ref(db);
+  // get goals you have joines of your friends
+  const friendGoalsSnap = await get(child(dbRef, `users/${userId}/friendGoalsJoined`));
+  let friendGoals = [];
+  if (friendGoalsSnap.exists()) {
+    const friendGoalsJoined = friendGoalsSnap.val();
+
+    // loop through friends
+    for (const friendId of Object.keys(friendGoalsJoined)) {
+      const goalsDict = friendGoalsJoined[friendId];
+
+      // loop through goals
+      for (const [goalId, joined] of Object.entries(goalsDict)) {
+        if (joined) {
+
+          // get value only if it exists
+          const friendGoalSnap = await get(child(dbRef, `users/${friendId}/items/${goalId}`));
+          if (friendGoalSnap.exists()) {
+            friendGoals.push({ id: goalId, ...friendGoalSnap.val(), owner: friendId });
+          }
+        }
+      }
+    }
+  }
+
+  return friendGoals;
+}
+
 // fetch only incomplete goals
 export async function fetchIncompleteGoals(userId) {
-  const allGoals = await fetchGoals(userId);
+  const allGoals = await fetchYourGoals(userId);
   return allGoals.filter(goal => !goal.completed);
 }
 
-// fetch only completed goals
+// fetch only completed goals that you or your friends have completed
 export async function fetchCompletedGoals(userId) {
-  const allGoals = await fetchGoals(userId);
-  return allGoals.filter(goal => goal.completed);
+  const yourGoals = await fetchYourGoals(userId);
+  const yourCompletedGoals = yourGoals.filter(goal => goal.completed);
+  const joinedFriendsGoals = await fetchJoinedFriendsGoals(userId);
+  const completedFriendGoals = joinedFriendsGoals.filter(goal => goal.completed);
+  return [...yourCompletedGoals, ...completedFriendGoals];
 }
 
 // add a new goal for a user
@@ -49,4 +84,19 @@ export async function addGoal(userId, goal) {
 export async function completeGoal(userId, goalId) {
   const goalRef = ref(db, `users/${userId}/items/${goalId}`);
   await update(goalRef, { completed: true });
+}
+
+// Update participants for a goal
+export async function updateGoalParticipants(ownerId, goalId, currentUserId) {
+  const participantsRef = ref(db, `users/${ownerId}/items/${goalId}/participants`);
+  const snapshot = await get(participantsRef);
+  const participants = snapshot.val() || {};
+
+  if (participants[currentUserId]) {
+    // User is currently a participant, so remove them
+    await set(child(participantsRef, currentUserId), null); 
+  } else {
+    // User is not a participant, so add them
+    await update(participantsRef, { [currentUserId]: true });
+  }
 }

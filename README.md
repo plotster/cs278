@@ -2,6 +2,12 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Domain 
+We are hosting out website using Firebase at: [https://plotster.web.app/](https://plotster.web.app/)
+
+To deploy changes to the website after editing, run `npm run build` followed by `firebase deploy` then refresh the page.
+
+
 ## Emulator
 
 In order to test our code with the database, we are using Firebase Realtime Database Emulator. Below are the steps:

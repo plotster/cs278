@@ -1,17 +1,21 @@
 import React from 'react';
 import NotificationItem from '../components/NotificationItem';
-import { addConnection, removeNotification } from '../util/NotificationsAPI';
+import { addConnection, removeNotification, addFriendGoal } from '../util/NotificationsAPI';
 
-const Notifications = ({ notifications, setNotifications, userId }) => {
+const Notifications = ({ notifications, setNotifications, userId, onJoinFriendGoal }) => {
 
   const handleAccept = async (notifKey, notification) => {
     // add sender
     const senderId = notification.sender?.id;
     if (senderId && notification.type === 'friend_request') {
-      await addConnection(userId, String(senderId));
+      await addConnection(userId, senderId);
     }
 
-    // TODO: add case for RSVP which should add to feed page
+    // add joined friend goal to bucket list page
+    if (senderId && notification.type === 'rsvp') {
+      await addFriendGoal(userId, senderId, notification.goalId);
+      if (onJoinFriendGoal) onJoinFriendGoal();  // refetches the friend goals
+    }
 
     // remove notification after accepting
     await removeNotification(userId, notifKey);

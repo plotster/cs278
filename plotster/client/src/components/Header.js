@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Notifications from '../pages/Notifications';
 import { fetchAllUsers, fetchUserNotifications } from '../util/NotificationsAPI'; 
 
-const Header = ({ user }) => {
-  const [notifications, setNotifications] = useState([]);
+// user prop might be null initially, userId is the fallback for critical operations
+const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
+  const [notifications, setNotifications] = useState({});
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -21,17 +22,23 @@ const Header = ({ user }) => {
   // fetching all notifications from the DB
   useEffect(() => {
     async function loadNotifs() {
-      const notifications = await fetchUserNotifications(user.id);
-      setNotifications(notifications);
+      // Use userId (guaranteed to be DEFAULT_USER_ID) for fetching notifications
+      const fetchedNotifications = await fetchUserNotifications(userId);
+      setNotifications(fetchedNotifications);
     }
-    loadNotifs();
-  }, [user.id]);
+    if (userId) { // Ensure userId is available
+      loadNotifs();
+    }
+  }, [userId]);
 
   // Filter users by search term
-  // TODO: ensure that when a user create an account, their name is added to the userList
   const filteredUsers = userList.filter(u =>
     u.name && u.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Display name and avatar if user data is loaded, otherwise fallback or hide
+  const userName = user ? user.name : 'Loading...';
+  const userAvatar = user ? user.avatar : 'default_avatar.png'; // Provide a path to a default avatar
 
   return (
     <header className="header">
@@ -63,7 +70,6 @@ const Header = ({ user }) => {
             </svg>
           </button>
 
-          {/* Show filtered users if searching */}
           {showSearch && searchTerm && (
             <div className="absolute left-8 top-8 bg-white border rounded shadow-lg z-10 w-48 max-h-48 overflow-y-auto">
               {filteredUsers.length > 0 ? (
@@ -91,14 +97,25 @@ const Header = ({ user }) => {
           </button>
           {showNotifications && (
             <div className="absolute right-0 mt-2 w-90 bg-white border rounded shadow-lg z-20">
-              <Notifications notifications={notifications} setNotifications={setNotifications} userId={user.id}/>
+              {/* Pass userId for notifications context */}
+              <Notifications notifications={notifications} setNotifications={setNotifications} userId={userId} onJoinFriendGoal={() => setRefetchJoinedGoalsTrigger(t => t + 1)}/>
             </div>
           )}
         </div>
 
-        {/* User Avatar and Name */}
-        <img src={user.avatar} alt={user.name} className="avatar ml-4" />
-        <span className="user-name ml-2">{user.name}</span>
+        {/* User Avatar and Name - use fallbacks if user prop is null */}
+        {user ? (
+          <>
+            <img src={user.avatar} alt={user.name} className="avatar ml-4" />
+            <span className="user-name ml-2">{user.name}</span>
+          </>
+        ) : (
+          <>
+            {/* You might want a placeholder avatar or loading text */}
+            <div className="avatar ml-4 w-10 h-10 bg-gray-300 rounded-full"></div> 
+            <span className="user-name ml-2">Loading...</span>
+          </>
+        )}
       </div>
     </header>
   );

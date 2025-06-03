@@ -1,9 +1,9 @@
 // File: src/pages/BucketList.js
 import React, {useState, useEffect} from 'react';
 import BucketItem from '../components/BucketItem';
-import { addGoal, completeGoal, fetchIncompleteGoals } from '../util/BucketListAPI.js';
+import { addGoal, completeGoal, fetchIncompleteGoals, fetchJoinedFriendsGoals } from '../util/BucketListAPI.js';
 
-const BucketList = ({ userId }) => {
+const BucketList = ({ userId, refetchJoinedGoalsTrigger }) => {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     title: '',
@@ -13,6 +13,8 @@ const BucketList = ({ userId }) => {
     capacity: 0,
   });
   const [goals, setGoals] = useState([]);
+  const [joinedGoals, setJoinedGoals] = useState([]);
+  const [showCongrats, setShowCongrats] = useState(false);
 
   // Fetch goals every time the component mounts or userId changes
   useEffect(() => {
@@ -22,6 +24,15 @@ const BucketList = ({ userId }) => {
     };
     loadGoals();
   }, [userId, showForm]); // refetch when userId or showForm changes
+
+  // fetch joined friends' goals
+  useEffect(() => {
+    const loadJoinedGoals = async () => {
+      const fetchedJoinedGoals = await fetchJoinedFriendsGoals(userId);
+      setJoinedGoals(fetchedJoinedGoals);
+    };
+    loadJoinedGoals();
+  }, [userId, refetchJoinedGoalsTrigger]);
 
   const handleChange = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -59,6 +70,14 @@ const BucketList = ({ userId }) => {
       capacity: 0,
     });
   } 
+
+  const handleComplete = async (itemId) => {
+    await completeGoal(userId, itemId);
+    setShowCongrats(true);
+    setTimeout(() => setShowCongrats(false), 2000); // Hide after 2 seconds
+    const updatedGoals = await fetchIncompleteGoals(userId);
+    setGoals(updatedGoals);
+  };
 
   return (
     <div>
@@ -161,17 +180,44 @@ const BucketList = ({ userId }) => {
         </div>
       )}
 
+      {/* congrats pop up */}
+      {showCongrats && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white border border-green-500 rounded-lg shadow-lg p-8 text-center z-50">
+            <h2 className="text-2xl font-bold text-green-600 mb-2">🎉 Congrats! 🎉</h2>
+            <p className="text-lg">You completed a goal!</p>
+          </div>
+          <div className="fixed inset-0 bg-black opacity-30 z-40"></div>
+        </div>
+      )}
+      
+      {/* your goals */}
       {goals.length > 0 ? (
         goals.map(item => (
-          <BucketItem key={item.id} item={item} onComplete={async (itemId) => {
-            await completeGoal(userId, itemId);
-            const updatedGoals = await fetchIncompleteGoals(userId);
-            setGoals(updatedGoals);
-          }} />
+          <BucketItem key={item.id} item={item} onComplete={() => handleComplete(item.id, item.title)} />
         ))
       ) : (
         <p className="text-gray-500 bg-white p-6 rounded-lg text-center">
           You don't have any bucket list goals yet. Add your first goal!
+        </p>
+      )}
+      
+      {/* friend's goals you have joined */}
+      <h2 className="page_header mt-8">Friend's Goals You Have Joined</h2>
+      {joinedGoals.filter(item => !item.completed).length > 0 ? (
+        joinedGoals
+          .filter(item => !item.completed)  // only show incomplete joined goals
+          .map(item => (
+            <BucketItem
+              key={item.id + '-' + item.owner}
+              item={item}
+              friend={{ name: item.owner }}
+              showComplete={false}  // hide complete button for friend's goals
+            />
+          ))
+      ) : (
+        <p className="text-gray-500 bg-white p-6 rounded-lg text-center">
+          You haven't joined any incomplete friend's goals yet.
         </p>
       )}
     </div>
