@@ -1,0 +1,124 @@
+.feed-container {
+  position: relative;
+  padding: 20px 0;
+}
+
+.carousel-container {
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 0 20px 50px 20px;
+}
+
+.carousel-slide {
+  outline: none;
+}
+
+.slick-slide > div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-slide .bucket-item {
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  will-change: transform;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background-color: white;
+}
+
+.carousel-slide .bucket-item .bucket-details {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  height: auto !important;
+  max-height: none !important;
+}
+
+.carousel-slide .bucket-item .bucket-details .mt-2,
+.carousel-slide .bucket-item .bucket-details .flex.mt-1 {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.carousel-slide .bucket-item:hover {
+  transform: scale(1.03);
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.slick-prev,
+.slick-next {
+  width: 40px;
+  height: 40px;
+  z-index: 20;
+  border-radius: 50%;
+}
+
+.slick-prev {
+  left: -30px;
+}
+
+.slick-next {
+  right: -30px;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  font-size: 30px;
+  color: #4F46E5;
+}
+
+.slick-prev.slick-disabled,
+.slick-next.slick-disabled {
+  opacity: 1 !important;
+  cursor: pointer !important;
+}
+
+.slick-prev.slick-disabled:before,
+.slick-next.slick-disabled:before {
+  color: #4F46E5 !important;
+}
+
+.slick-dots {
+  bottom: -30px;
+}
+
+.slick-dots li button:before {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.slick-dots li.slick-active button:before {
+  color: #4F46E5;
+}
+
+.slick-slide {
+  opacity: 0.6;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  padding: 0 5px;
+}
+
+.slick-slide.slick-active {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .slick-prev {
+    left: 5px;
+  }
+  .slick-next {
+    right: 5px;
+  }
+  .slick-prev:before,
+  .slick-next:before {
+    font-size: 24px;
+  }
+  .carousel-container {
+    padding: 0 5px 50px 5px;
+  }
+} 

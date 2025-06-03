@@ -8,7 +8,10 @@ export async function fetchYourGoals(userId) {
   const snapshot = await get(child(ref(db), `users/${userId}/items`));
   if (snapshot.exists()) {
     const items = snapshot.val();
-    return Object.entries(items).map(([id, data]) => ({ id, ...data }));
+    // ensure items is an object before calling Object.entries
+    if (typeof items === 'object' && items !== null) {
+      return Object.entries(items).map(([id, data]) => ({ id, ...data }));
+    }
   }
   return [];
 }
@@ -41,7 +44,6 @@ export async function fetchJoinedFriendsGoals(userId) {
 
   return friendGoals;
 }
-
 
 // fetch only incomplete goals
 export async function fetchIncompleteGoals(userId) {
@@ -78,8 +80,29 @@ export async function addGoal(userId, goal) {
   return goalId;
 }
 
-// Mark a goal as completed
+// mark a goal as completed
 export async function completeGoal(userId, goalId) {
   const goalRef = ref(db, `users/${userId}/items/${goalId}`);
   await update(goalRef, { completed: true });
+}
+
+// update participants for a goal
+export async function updateGoalParticipants(ownerId, goalId, currentUserId) {
+  const goalParticipantsRef = ref(db, `users/${ownerId}/items/${goalId}/participants`);
+  const userJoinedGoalRef = ref(db, `users/${currentUserId}/friendGoalsJoined/${ownerId}/${goalId}`);
+
+  const snapshot = await get(goalParticipantsRef);
+  const participants = snapshot.val() || {};
+
+  if (participants[currentUserId]) {
+    // user is currently a participant, so remove them
+    await set(child(goalParticipantsRef, currentUserId), null);
+    await set(userJoinedGoalRef, null);
+    console.log(`User ${currentUserId} removed from goal ${goalId} and their joined list`);
+  } else {
+    // user is not a participant, so add them
+    await update(goalParticipantsRef, { [currentUserId]: true });
+    await set(userJoinedGoalRef, true); 
+    console.log(`User ${currentUserId} added to goal ${goalId} and their joined list`);
+  }
 }

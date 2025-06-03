@@ -24,13 +24,13 @@ const NotificationItem = ({ notification, onAccept, onDecline }) => {
         </div>
         <div className="notification-actions">
           <button
-            onClick={() => onAccept(notification.id)}
+            onClick={onAccept}
             className="notification-accept"
           >
             Accept
           </button>
           <button
-            onClick={() => onDecline(notification.id)}
+            onClick={onDecline}
             className="notification-decline"
           >
             Decline
