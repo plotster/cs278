@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Slider from 'react-slick';
 import BucketItem from '../components/BucketItem';
 import { handleComplete, handleRSVP } from '../util/BucketListHelper';
@@ -8,10 +8,13 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "../styles/feed.css";
 
-export default function Feed({user, friends, setFriends, bucketList, setBucketList}) {
+export default function Feed({user, friends, setFriends, bucketList, setBucketList, setRefetchJoinedGoalsTrigger}) {
+  const sliderRef = useRef(null);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [previousFeedEventsLength, setPreviousFeedEventsLength] = useState(0);
+
   const settings = {
     dots: true,
-    infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -19,7 +22,8 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
     lazyLoad: 'ondemand',
     adaptiveHeight: true,
     useCSS: true,
-    waitForAnimate: false
+    waitForAnimate: false,
+    afterChange: (index) => setCurrentSlideIndex(index)
   };
 
   const [feedEvents, setFeedEvents] = useState([]);
@@ -94,6 +98,11 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
                 participants: processedParticipants
               };
 
+              // if current user has already joined this item, skip adding it to the feed
+              if (user && user.id && actualItem.participants && actualItem.participants.some(p => p.id === user.id)) {
+                return; 
+              }
+
               collectedEvents.push({
                 key: `${friend.id}-${actualItem.id}-owner`,
                 type: 'OWNER_GOAL',
@@ -131,6 +140,11 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
                 participants: processedParticipants
               };
 
+              // if current user has already joined this item, skip adding it to the feed
+              if (user && user.id && actualItem.participants && actualItem.participants.some(p => p.id === user.id)) {
+                return;
+              }
+
               collectedEvents.push({
                 key: `${friend.id}-${actualItem.id}-joined-${originalItem.owner}`,
                 type: 'JOINED_GOAL', 
@@ -154,6 +168,23 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
     generateAndSetFeedEvents();
   }, [user, friends, allUsersMap]);
 
+  useEffect(() => {
+    if (sliderRef.current &&
+        feedEvents.length > 0 &&
+        feedEvents.length < previousFeedEventsLength
+    ) {
+        const newTargetIndex = Math.min(currentSlideIndex, feedEvents.length - 1);
+        setTimeout(() => {
+            if (sliderRef.current) {
+                sliderRef.current.slickGoTo(Math.max(0, newTargetIndex));
+            }
+        }, 0);
+    }
+
+    setPreviousFeedEventsLength(feedEvents.length);
+
+}, [feedEvents, currentSlideIndex, previousFeedEventsLength]);
+
   if (isLoading) {
     return (
       <div className="feed-container max-w-3xl mx-auto px-4 text-center py-10">
@@ -172,34 +203,87 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
         </div>
       ) : (
         <div className="carousel-container">
-          <Slider {...settings}>
-            {feedEvents.map((event) => (
-              <div key={event.key} className="carousel-slide px-4">
-                <div className="flex items-center mb-4">
-                  <img
-                    src={event.mainPersonForHeader.avatar}
-                    alt={event.mainPersonForHeader.name}
-                    className="w-10 h-10 rounded-full mr-2"
-                  />
-                  <h3 className="font-medium">
-                    {event.type === 'OWNER_GOAL'
-                      ? `${event.mainPersonForHeader.name}'s Goal`
-                      : `${event.mainPersonForHeader.name} joined ${event.actualOwner.name}'s Goal`}
-                  </h3>
-                </div>
-                <BucketItem
-                  item={event.actualItem}
-                  friend={event.actualOwner}
-                  currentUser={user}
-                  showRSVP={true}
-                  onRSVP={() =>
-                    handleRSVP(event.actualOwner.id, event.actualItem.id, user, setFriends)
-                  }
-                  onComplete={() => handleComplete(event.actualItem.id, setBucketList)}
+          {feedEvents.length === 1 ? (
+            <div className="carousel-slide px-4 single-item-feed">
+              <div className="flex items-center mb-4">
+                <img
+                  src={feedEvents[0].mainPersonForHeader.avatar}
+                  alt={feedEvents[0].mainPersonForHeader.name}
+                  className="w-10 h-10 rounded-full mr-2"
                 />
+                <h3 className="font-medium">
+                  {feedEvents[0].type === 'OWNER_GOAL'
+                    ? `${feedEvents[0].mainPersonForHeader.name}\'s Goal`
+                    : `${feedEvents[0].mainPersonForHeader.name} joined ${feedEvents[0].actualOwner.name}\'s Goal`}
+                </h3>
               </div>
-            ))}
-          </Slider>
+              <BucketItem
+                item={feedEvents[0].actualItem}
+                friend={feedEvents[0].actualOwner}
+                currentUser={user}
+                showRSVP={true}
+                onRSVP={async () => {
+                  const success = await handleRSVP(
+                    feedEvents[0].actualOwner.id,
+                    feedEvents[0].actualItem.id,
+                    user,
+                    setFriends
+                  );
+                  if (success) {
+                    if (setRefetchJoinedGoalsTrigger) {
+                      setRefetchJoinedGoalsTrigger(t => t + 1);
+                    }
+                    setFeedEvents(prevEvents =>
+                      prevEvents.filter(e => e.key !== feedEvents[0].key)
+                    );
+                  }
+                }}
+                onComplete={() => handleComplete(feedEvents[0].actualItem.id, setBucketList)}
+              />
+            </div>
+          ) : (
+            <Slider ref={sliderRef} {...settings} infinite={feedEvents.length > settings.slidesToShow}>
+              {feedEvents.map((event) => (
+                <div key={event.key} className="carousel-slide px-4">
+                  <div className="flex items-center mb-4">
+                    <img
+                      src={event.mainPersonForHeader.avatar}
+                      alt={event.mainPersonForHeader.name}
+                      className="w-10 h-10 rounded-full mr-2"
+                    />
+                    <h3 className="font-medium">
+                      {event.type === 'OWNER_GOAL'
+                        ? `${event.mainPersonForHeader.name}'s Goal`
+                        : `${event.mainPersonForHeader.name} joined ${event.actualOwner.name}'s Goal`}
+                    </h3>
+                  </div>
+                  <BucketItem
+                    item={event.actualItem}
+                    friend={event.actualOwner}
+                    currentUser={user}
+                    showRSVP={true}
+                    onRSVP={async () => {
+                      const success = await handleRSVP(
+                        event.actualOwner.id, 
+                        event.actualItem.id, 
+                        user, 
+                        setFriends
+                      );
+                      if (success) {
+                        if (setRefetchJoinedGoalsTrigger) {
+                          setRefetchJoinedGoalsTrigger(t => t + 1);
+                        }
+                        setFeedEvents(prevEvents => 
+                          prevEvents.filter(e => e.key !== event.key)
+                        );
+                      }
+                    }}
+                    onComplete={() => handleComplete(event.actualItem.id, setBucketList)}
+                  />
+                </div>
+              ))}
+            </Slider>
+          )}
         </div>
       )}
     </div>

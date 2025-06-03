@@ -24,11 +24,11 @@ export const handleRSVP = async (friendId, itemId, user, setFriends) => {
               item.id === itemId
                 ? {
                     ...item,
-                    participants: item.participants.some(
-                      (p) => p.id === user.id
-                    )
-                      ? item.participants.filter((p) => p.id !== user.id)
-                      : [...item.participants, user],
+                    participants: Array.isArray(item.participants) 
+                      ? (item.participants.some((p) => p.id === user.id)
+                        ? item.participants.filter((p) => p.id !== user.id)
+                        : [...item.participants, user])
+                      : [user],
                   }
                 : item
             ),
@@ -40,6 +40,7 @@ export const handleRSVP = async (friendId, itemId, user, setFriends) => {
   try {
     await updateGoalParticipants(friendId, itemId, user.id);
     console.log(`RSVP updated in DB for item ${itemId}, user ${user.id}`);
+    return true;
   } catch (error) {
     console.error("Error updating RSVP in database:", error);
     setFriends((fList) =>
@@ -51,11 +52,11 @@ export const handleRSVP = async (friendId, itemId, user, setFriends) => {
                 item.id === itemId
                   ? {
                       ...item,
-                      participants: item.participants.some(
-                        (p) => p.id === user.id
-                      )
-                        ? item.participants.filter((p) => p.id !== user.id)
-                        : [...item.participants, user],
+                      participants: Array.isArray(item.participants)
+                        ? (item.participants.some((p) => p.id === user.id)
+                          ? [...item.participants.filter((p) => p.id !== user.id), user]
+                          : item.participants.filter((p) => p.id !== user.id))
+                        : [],
                     }
                   : item
               ),
@@ -64,5 +65,6 @@ export const handleRSVP = async (friendId, itemId, user, setFriends) => {
       )
     );
     alert("Failed to update RSVP. Please try again.");
+    return false;
   }
 };

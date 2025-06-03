@@ -80,23 +80,29 @@ export async function addGoal(userId, goal) {
   return goalId;
 }
 
-// Mark a goal as completed
+// mark a goal as completed
 export async function completeGoal(userId, goalId) {
   const goalRef = ref(db, `users/${userId}/items/${goalId}`);
   await update(goalRef, { completed: true });
 }
 
-// Update participants for a goal
+// update participants for a goal
 export async function updateGoalParticipants(ownerId, goalId, currentUserId) {
-  const participantsRef = ref(db, `users/${ownerId}/items/${goalId}/participants`);
-  const snapshot = await get(participantsRef);
+  const goalParticipantsRef = ref(db, `users/${ownerId}/items/${goalId}/participants`);
+  const userJoinedGoalRef = ref(db, `users/${currentUserId}/friendGoalsJoined/${ownerId}/${goalId}`);
+
+  const snapshot = await get(goalParticipantsRef);
   const participants = snapshot.val() || {};
 
   if (participants[currentUserId]) {
     // User is currently a participant, so remove them
-    await set(child(participantsRef, currentUserId), null); 
+    await set(child(goalParticipantsRef, currentUserId), null);
+    await set(userJoinedGoalRef, null); // Also remove from their joined list
+    console.log(`User ${currentUserId} removed from goal ${goalId} and their joined list`);
   } else {
     // User is not a participant, so add them
-    await update(participantsRef, { [currentUserId]: true });
+    await update(goalParticipantsRef, { [currentUserId]: true });
+    await set(userJoinedGoalRef, true); // Also add to their joined list
+    console.log(`User ${currentUserId} added to goal ${goalId} and their joined list`);
   }
 }

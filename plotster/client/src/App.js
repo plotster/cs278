@@ -84,6 +84,7 @@ const App = () => {
                   setFriends={setFriendsList}
                   bucketList={bucketList}
                   setBucketList={setBucketList} 
+                  setRefetchJoinedGoalsTrigger={setRefetchJoinedGoalsTrigger}
                 />
               )} 
             />
