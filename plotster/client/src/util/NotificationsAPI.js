@@ -47,6 +47,20 @@ export async function addConnection(userId, newConnectionId) {
   await set(userRef, connections);
 }
 
+// remove a connection from a user's connections map
+export async function removeConnection(userId, connectionId) {
+  const userRef = ref(db, `users/${userId}/connections`);
+  const snapshot = await get(userRef);
+  let connections = {};
+  if (snapshot.exists()) {
+    connections = snapshot.val() || {};
+    if (connections[connectionId]) {
+      delete connections[connectionId];
+      await set(userRef, connections);
+    }
+  }
+}
+
 // remove a notification from a user's notifications list
 export async function removeNotification(userId, notificationId) {
   const notifRef = ref(db, `users/${userId}/notifications/${notificationId}`);

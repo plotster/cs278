@@ -49,7 +49,7 @@ const BucketList = ({ userId, refetchJoinedGoalsTrigger }) => {
       location: form.location,
       completed: false,
       capacity: form.capacity,
-      participants: [userId],
+      participants: {userId: true},
       pictures: [],
     };
     
