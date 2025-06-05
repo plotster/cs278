@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Notifications from '../pages/Notifications';
-import { fetchAllUsers, fetchUserNotifications } from '../util/NotificationsAPI'; 
+import { fetchAllUsers, fetchUserNotifications, addConnection, removeConnection, fetchUserDetails } from '../util/NotificationsAPI'; 
 
 // user prop might be null initially, userId is fallback
 const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
@@ -9,6 +9,8 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [userList, setUserList] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [connections, setConnections] = useState({});
 
   // fetching all the users from the DB
   useEffect(() => {
@@ -30,6 +32,31 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
       loadNotifs();
     }
   }, [userId]);
+
+  // Fetch current user's connections
+  useEffect(() => {
+    async function loadConnections() {
+      if (!userId) return;
+      const details = await fetchUserDetails(userId);
+      setConnections(details?.connections || {});
+    }
+    loadConnections();
+  }, [userId]);
+
+  // Handler for follow/unfollow
+  const handleFollow = async (targetUserId) => {
+    await addConnection(userId, targetUserId);
+    setConnections(prev => ({ ...prev, [targetUserId]: true }));
+  };
+
+  const handleUnfollow = async (targetUserId) => {
+    await removeConnection(userId, targetUserId);
+    setConnections(prev => {
+      const updated = { ...prev };
+      delete updated[targetUserId];
+      return updated;
+    });
+  };
 
   // filter users by search term
   const filteredUsers = userList.filter(u =>
@@ -57,13 +84,19 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
               className="border rounded px-2 py-1 w-48 mr-2"
               placeholder="Search users..."
               value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
+              onChange={e => {
+                setSearchTerm(e.target.value);
+                setSelectedUserId(null);  // reset selection on new search
+              }}
               autoFocus
             />
           )}
           <button
             className="focus:outline-none"
-            onClick={() => setShowSearch(s => !s)}
+            onClick={() => {
+              setShowSearch(s => !s);
+              setSelectedUserId(null);
+            }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-500 hover:text-purple-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
@@ -74,8 +107,54 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
             <div className="absolute left-8 top-8 bg-white border rounded shadow-lg z-10 w-48 max-h-48 overflow-y-auto">
               {filteredUsers.length > 0 ? (
                 filteredUsers.map(u => (
-                  <div key={u.id} className="px-2 py-1 hover:bg-gray-100 cursor-pointer">
-                    {u.name}
+                  <div
+                    key={u.id}
+                    className="px-2 py-1 hover:bg-gray-100 cursor-pointer flex flex-col"
+                  >
+                    <div
+                      className="flex items-center"
+                      onClick={() => setSelectedUserId(selectedUserId === u.id ? null : u.id)}
+                    >
+                      <img src={u.avatar || 'default_avatar.png'} alt={u.name} className="w-6 h-6 rounded-full mr-2" />
+                      {u.name}
+                    </div>
+                    {selectedUserId === u.id && u.id !== userId && (
+                      <div className="mt-2 bg-white border rounded shadow-lg z-20 px-4 py-2 flex items-center w-44">
+                        {connections[u.id] ? (
+                          <button
+                            className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              await handleUnfollow(u.id);
+                              setSelectedUserId(null);
+                            }}
+                          >
+                            Unfollow
+                          </button>
+                        ) : (
+                          <button
+                            className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              await handleFollow(u.id);
+                              setSelectedUserId(null);
+                            }}
+                          >
+                            Follow
+                          </button>
+                        )}
+                        <button
+                          className="ml-2 text-gray-400 hover:text-gray-600"
+                          onClick={e => {
+                            e.stopPropagation();
+                            setSelectedUserId(null);
+                          }}
+                          title="Close"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))
               ) : (
@@ -84,6 +163,41 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
             </div>
           )}
         </div>
+
+        {/* Follow/Unfollow Button */}
+        {/* {selectedUser && selectedUser.id !== userId && (
+          <div className="absolute left-0 top-full mt-2 bg-white border rounded shadow-lg z-20 px-4 py-2 flex items-center w-48">
+            <span className="mr-2">{selectedUser.name}</span>
+            {connections[selectedUser.id] ? (
+              <button
+                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                onClick={async () => {
+                  await handleUnfollow(selectedUser.id);
+                  setSelectedUser(null);
+                }}
+              >
+                Unfollow
+              </button>
+            ) : (
+              <button
+                className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                onClick={async () => {
+                  await handleFollow(selectedUser.id);
+                  setSelectedUser(null);
+                }}
+              >
+                Follow
+              </button>
+            )}
+            <button
+              className="ml-2 text-gray-400 hover:text-gray-600"
+              onClick={() => setSelectedUser(null)}
+              title="Close"
+            >
+              ×
+            </button>
+          </div>
+        )} */}
 
         {/* Notification Bell */}
         <div className="relative">
