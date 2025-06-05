@@ -164,41 +164,6 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
           )}
         </div>
 
-        {/* Follow/Unfollow Button */}
-        {/* {selectedUser && selectedUser.id !== userId && (
-          <div className="absolute left-0 top-full mt-2 bg-white border rounded shadow-lg z-20 px-4 py-2 flex items-center w-48">
-            <span className="mr-2">{selectedUser.name}</span>
-            {connections[selectedUser.id] ? (
-              <button
-                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                onClick={async () => {
-                  await handleUnfollow(selectedUser.id);
-                  setSelectedUser(null);
-                }}
-              >
-                Unfollow
-              </button>
-            ) : (
-              <button
-                className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                onClick={async () => {
-                  await handleFollow(selectedUser.id);
-                  setSelectedUser(null);
-                }}
-              >
-                Follow
-              </button>
-            )}
-            <button
-              className="ml-2 text-gray-400 hover:text-gray-600"
-              onClick={() => setSelectedUser(null)}
-              title="Close"
-            >
-              ×
-            </button>
-          </div>
-        )} */}
-
         {/* Notification Bell */}
         <div className="relative">
           <button
