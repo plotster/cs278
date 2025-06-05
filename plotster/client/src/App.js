@@ -1,24 +1,43 @@
 // File: src/App.js
 import React, { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import BucketList from './pages/BucketList';
 import CompletedGoals from './pages/CompletedGoals';
 import Feed from './pages/Feed';
+import LogIn from './pages/LogIn';
 //import Notifications from './pages/Notifications';
 import Header from './components/Header';
 import SelectionBar from './components/SelectionBar';
-import { fetchAllUsers, fetchUserDetails } from './util/NotificationsAPI'; // Updated import
+import { fetchAllUsers, fetchUserDetails } from './util/NotificationsAPI';
 import './styles/global.css'
+import { auth } from './firebase'; 
 
 // TODO: replace with real user ID from auth system, for now, using a hardcoded one for initial load
-const userId = 'userId_1';
+// const userId = 'userId_1'; // Remove hardcoded userId
 
 const App = () => {
+  const [userId, setUserId] = useState(null); // Initialize userId as null
   const [bucketList, setBucketList] = useState([]); // For the main BucketList page
   const [currentUser, setCurrentUser] = useState(null); // For the logged-in user
   const [friendsList, setFriendsList] = useState([]);   // For the Feed component
   const [allUsers, setAllUsers] = useState([]); // To help find friend details
   const [refetchJoinedGoalsTrigger, setRefetchJoinedGoalsTrigger] = useState(0);
+  const navigate = useNavigate(); // for redirecting to login page
+  const location = useLocation(); 
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        setUserId(user.uid); // set userId from authenticated user
+      } else {
+        setUserId(null); // reset userId if no user is logged in
+        if (location.pathname !== '/login') { 
+          navigate('/login'); // redirect to login page
+        }
+      }
+    });
+    return () => unsubscribe(); // cleanup subscription on unmount
+  }, [navigate, location]);
 
   // Fetch all users once
   useEffect(() => {
@@ -46,7 +65,7 @@ const App = () => {
       }
     };
     loadCurrentUser();
-  }, []);
+  }, [userId]); 
 
   // Determine friends list once current user and all users are loaded
   useEffect(() => {
@@ -73,6 +92,7 @@ const App = () => {
 
       <div className="content-container">
           <Routes>
+            <Route path="/login" element={<LogIn />} /> 
             <Route path="/" element={<BucketList userId={userId} refetchJoinedGoalsTrigger={refetchJoinedGoalsTrigger}/>} />
             <Route path="/completed" element={<CompletedGoals userId={userId} />} />
             <Route 

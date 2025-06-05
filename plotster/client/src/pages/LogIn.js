@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "../firebase";
+import db from "../firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged } from "firebase/auth";
 import { ref, set, get } from "firebase/database";
-import { database } from "../firebase";
 
 // This function is the log in page for the app 
 const LogIn = () => {
@@ -124,7 +124,7 @@ const LogIn = () => {
         console.log("Verification successful, user object:", result.user);
         
         // Check if user exists in database
-        const userRef = ref(database, `users/${result.user.uid}`);
+        const userRef = ref(db, `users/${result.user.uid}`);
         console.log("Checking user in database at path:", `users/${result.user.uid}`);
         const snapshot = await get(userRef);
         
@@ -170,7 +170,7 @@ const LogIn = () => {
             return;
         }
 
-        const userRef = ref(database, `users/${user.uid}`);
+        const userRef = ref(db, `users/${user.uid}`);
         
         // Create a new user profile with all data stored in the database 
         await set(userRef, {

@@ -4,7 +4,9 @@
 
 import { initializeApp } from "firebase/app";
 import { getDatabase, connectDatabaseEmulator } from "firebase/database";
-// TODO: Add SDKs for Firebase Storage (bc photos and stuff)
+import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 
@@ -22,6 +24,8 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 
+export const auth = getAuth(app);
+export const storage = getStorage(app);
 const db = getDatabase(app);
 
 if (window.location.hostname === "localhost" ||

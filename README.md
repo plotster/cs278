@@ -9,7 +9,6 @@ To deploy changes to the website after editing, run `npm run build` followed by 
 
 
 ## Emulator
-
 In order to test our code with the database, we are using Firebase Realtime Database Emulator. Below are the steps:
 
 ### `npm run build`

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { ref as dbRef, update } from 'firebase/database';
-import { storage, database, auth } from '../firebase';
+import db, { auth, storage } from '../firebase';
 
 // This is used to update the profile picture associated with a user 
 const ProfilePicture = ({ currentUrl, onUpdate }) => {
@@ -57,7 +57,7 @@ const ProfilePicture = ({ currentUrl, onUpdate }) => {
 
       // Update the user's profile in the database
       console.log('Updating user profile...');
-      const userRef = dbRef(database, `users/${user.uid}`);
+      const userRef = dbRef(db, `users/${user.uid}`);
       await update(userRef, {
         avatar: downloadURL
       });
