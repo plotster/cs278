@@ -149,7 +149,7 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
                 type: 'JOINED_GOAL', 
                 mainPersonForHeader: friend, 
                 actualOwner: ownerObject,    
-                actualItem: actualItem, // Use the processed item
+                actualItem: actualItem,
               });
             }
           });
@@ -158,8 +158,6 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
         }
       }
       
-      // Sort events, for example, by item date if available, or just keep as collected
-      // collectedEvents.sort((a, b) => new Date(b.actualItem.date) - new Date(a.actualItem.date)); // Example sort
       setFeedEvents(collectedEvents);
       setSliderKey(prevKey => prevKey + 1);
       setIsLoading(false);
