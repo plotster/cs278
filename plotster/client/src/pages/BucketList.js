@@ -227,12 +227,12 @@ const BucketList = ({ userId, refetchJoinedGoalsTrigger }) => {
         joinedGoals
           .filter(item => !item.completed)  // only show incomplete joined goals
           .map(item => {
-            const ownerUser = allUsersMap[item.owner] || { id: item.owner, name: item.owner, avatar: 'https://placekitten.com/100/100' };
+            const ownerUser = allUsersMap[item.owner] || { id: item.owner, name: item.owner, avatar: 'https://placecats.com/100/100' };
             return (
               <BucketItem
                 key={item.id + '-' + item.owner}
                 item={item}
-                friend={{ id: ownerUser.id, name: ownerUser.name, avatar: ownerUser.avatar || 'https://placekitten.com/100/100' }}
+                friend={{ id: ownerUser.id, name: ownerUser.name, avatar: ownerUser.avatar || 'https://placecats.com/100/100' }}
                 showComplete={false}  // hide complete button for friend's goals
               />
             );

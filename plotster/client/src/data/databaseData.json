@@ -33,17 +33,17 @@
       "notifications": {
         "notif_1": {
           "type": "friend_request",
-          "sender": { "id": "userId_4", "name": "Random Name", "avatar": "https://placekitten.com/104/104" },
+          "sender": { "id": "userId_4", "name": "Random Name", "avatar": "https://placecats.com/104/104" },
           "time": "2 hours ago"
         },
         "notif_2": {
           "type": "friend_request",
-          "sender": { "id": "userId_5", "name": "Casey Smith", "avatar": "https://placekitten.com/104/104" },
+          "sender": { "id": "userId_5", "name": "Casey Smith", "avatar": "https://placecats.com/104/104" },
           "time": "2 hours ago"
         },
         "notif_3": {
           "type": "rsvp",
-          "sender": { "id": "userId_2", "name": "Bob", "avatar": "https://placekitten.com/104/104" },
+          "sender": { "id": "userId_2", "name": "Bob", "avatar": "https://placecats.com/104/104" },
           "time": "2 hours ago",
           "goalId": "goal_1",
           "goalTitle": "Visit the Grand Canyon"

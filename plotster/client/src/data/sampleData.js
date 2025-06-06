@@ -1,7 +1,7 @@
 const sampleUser = {
     id: "userId_1",
     name: "Alex Taylor",
-    avatar: "https://placekitten.com/100/100",
+    avatar: "https://placecats.com/100/100",
   };
   
   const sampleBucketList = [
@@ -11,8 +11,8 @@ const sampleUser = {
       location: "Stanford University",
       date: "May 5, 2025",
       participants: [
-        { id: 2, name: "Jordan Lee", avatar: "https://placekitten.com/101/101" },
-        { id: 3, name: "Taylor Kim", avatar: "https://placekitten.com/102/102" }
+        { id: 2, name: "Jordan Lee", avatar: "https://placecats.com/101/101" },
+        { id: 3, name: "Taylor Kim", avatar: "https://placecats.com/102/102" }
       ],
       completed: false,
       photos: []
@@ -22,7 +22,7 @@ const sampleUser = {
       title: "Try the new ramen place",
       location: "Sakura Ramen, Downtown",
       date: "May 10, 2025",
-      participants: [{ id: 4, name: "Riley Johnson", avatar: "https://placekitten.com/103/103" }],
+      participants: [{ id: 4, name: "Riley Johnson", avatar: "https://placecats.com/103/103" }],
       completed: false,
       photos: []
     },
@@ -32,15 +32,15 @@ const sampleUser = {
       location: "Eagle Summit Trail",
       date: "April 15, 2025",
       participants: [
-        { id: 2, name: "Jordan Lee", avatar: "https://placekitten.com/101/101" },
-        { id: 5, name: "Casey Smith", avatar: "https://placekitten.com/104/104" }
+        { id: 2, name: "Jordan Lee", avatar: "https://placecats.com/101/101" },
+        { id: 5, name: "Casey Smith", avatar: "https://placecats.com/104/104" }
       ],
       completed: true,
       photos: [
-        "https://placekitten.com/300/200",
-        "https://placekitten.com/200/300",
-        "https://placekitten.com/300/200",
-        "https://placekitten.com/200/200"
+        "https://placecats.com/300/200",
+        "https://placecats.com/200/300",
+        "https://placecats.com/300/200",
+        "https://placecats.com/200/200"
       ]
     }
   ];
@@ -49,7 +49,7 @@ const sampleUser = {
     {
       id: 2,
       name: "Jordan Lee",
-      avatar: "https://placekitten.com/101/101",
+      avatar: "https://placecats.com/101/101",
       bucketList: [
         {
           id: 4,
@@ -75,13 +75,13 @@ const sampleUser = {
     {
       id: 1,
       type: "friend_request",
-      sender: { id: 5, name: "Casey Smith", avatar: "https://placekitten.com/104/104" },
+      sender: { id: 5, name: "Casey Smith", avatar: "https://placecats.com/104/104" },
       time: "2 hours ago"
     },
     {
       id: 2,
       type: "rsvp",
-      sender: { id: 3, name: "Taylor Kim", avatar: "https://placekitten.com/102/102" },
+      sender: { id: 3, name: "Taylor Kim", avatar: "https://placecats.com/102/102" },
       goal: "Go fountain-hopping at campus",
       time: "1 day ago"
     }

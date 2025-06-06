@@ -180,7 +180,7 @@ const LogIn = () => {
             phoneNumber: user.phoneNumber,
             createdAt: new Date().toISOString(),
             lastLoginAt: new Date().toISOString(),
-            avatar: `https://placekitten.com/${100 + Math.floor(Math.random() * 10)}/${100 + Math.floor(Math.random() * 10)}`,
+            avatar: `https://placecats.com/${100 + Math.floor(Math.random() * 10)}/${100 + Math.floor(Math.random() * 10)}`,
             connections: {},
             totalGoalsCreated: 0,
             totalNotificationsReceived: 0,

@@ -67,7 +67,7 @@ export default function Feed({user, friends, setFriends, bucketList, setBucketLi
       const collectedEvents = [];
       
       const getUserObject = (userId) => {
-        return allUsersMap[userId] || { id: userId, name: 'Unknown', avatar: 'https://placekitten.com/100/100' };
+        return allUsersMap[userId] || { id: userId, name: 'Unknown', avatar: 'https://placecats.com/100/100' };
       };
 
       for (const friend of friends) {
