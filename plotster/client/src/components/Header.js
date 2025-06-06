@@ -89,8 +89,8 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger, onAvatarUpdate }) 
   return (
     <header className="header">
       <div className='title'>
-        <h1 className="text-2xl font-bold text-purple-700">
-          ✨ Plotster
+        <h1 className="text-2xl font-bold text-purple-700 plotster-title">
+          <span className="plotster-title-row">✨ Plotster</span>
         </h1>
       </div>
       <div className="flex items-center user-profile">

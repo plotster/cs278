@@ -12,7 +12,8 @@ const SelectionBar = () => {
                     }`
                 }
             >
-                Your Bucket List
+                <span className="hide-on-mobile">Your Bucket List</span>
+                <span className="show-on-mobile">Bucket List</span>
             </NavLink>
 
             <NavLink
@@ -23,7 +24,8 @@ const SelectionBar = () => {
                     }`
                 }
             >
-                Completed Goals
+                <span className="hide-on-mobile">Completed Goals</span>
+                <span className="show-on-mobile">Completed</span>
             </NavLink>
 
             <NavLink

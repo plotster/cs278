@@ -359,3 +359,52 @@ button.bg-gray-200:hover {
 .text-lg {
   font-size: 1.125rem;
 }
+
+.hide-on-mobile {
+  display: inline;
+}
+.show-on-mobile {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .selection-container {
+    padding-left: 4%;
+    padding-right: 4%;
+    height: auto;
+  }
+  .bar {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+  .bar a {
+    flex: 0 0 auto;
+    min-width: 120px;
+    text-align: center;
+    font-size: 1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    white-space: normal;
+    word-break: break-word;
+  }
+  .hide-on-mobile {
+    display: none !important;
+  }
+  .show-on-mobile {
+    display: inline !important;
+  }
+  .plotster-title {
+    font-size: 1.25rem !important;
+  }
+  .plotster-title-row {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    gap: 0.25em;
+  }
+}
