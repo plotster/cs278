@@ -2,6 +2,7 @@
 import React, {useState, useEffect} from 'react';
 import BucketItem from '../components/BucketItem';
 import { addGoal, completeGoal, fetchIncompleteGoals, fetchJoinedFriendsGoals } from '../util/BucketListAPI.js';
+import { fetchAllUsers } from '../util/NotificationsAPI';
 
 const BucketList = ({ userId, refetchJoinedGoalsTrigger }) => {
   const [showForm, setShowForm] = useState(false);
@@ -15,6 +16,7 @@ const BucketList = ({ userId, refetchJoinedGoalsTrigger }) => {
   const [goals, setGoals] = useState([]);
   const [joinedGoals, setJoinedGoals] = useState([]);
   const [showCongrats, setShowCongrats] = useState(false);
+  const [allUsersMap, setAllUsersMap] = useState({});
 
   // fetch goals every time the component mounts or userId changes
   useEffect(() => {
@@ -33,6 +35,23 @@ const BucketList = ({ userId, refetchJoinedGoalsTrigger }) => {
     };
     loadJoinedGoals();
   }, [userId, refetchJoinedGoalsTrigger]);
+
+  // fetch all users for avatar lookup
+  useEffect(() => {
+    const loadAllUsers = async () => {
+      try {
+        const usersArray = await fetchAllUsers();
+        const usersMap = usersArray.reduce((acc, u) => {
+          if (u && u.id) acc[u.id] = u;
+          return acc;
+        }, {});
+        setAllUsersMap(usersMap);
+      } catch (error) {
+        setAllUsersMap({});
+      }
+    };
+    loadAllUsers();
+  }, []);
 
   const handleChange = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -207,14 +226,17 @@ const BucketList = ({ userId, refetchJoinedGoalsTrigger }) => {
       {joinedGoals.filter(item => !item.completed).length > 0 ? (
         joinedGoals
           .filter(item => !item.completed)  // only show incomplete joined goals
-          .map(item => (
-            <BucketItem
-              key={item.id + '-' + item.owner}
-              item={item}
-              friend={{ name: item.owner }}
-              showComplete={false}  // hide complete button for friend's goals
-            />
-          ))
+          .map(item => {
+            const ownerUser = allUsersMap[item.owner] || { id: item.owner, name: item.owner, avatar: 'https://placekitten.com/100/100' };
+            return (
+              <BucketItem
+                key={item.id + '-' + item.owner}
+                item={item}
+                friend={{ id: ownerUser.id, name: ownerUser.name, avatar: ownerUser.avatar || 'https://placekitten.com/100/100' }}
+                showComplete={false}  // hide complete button for friend's goals
+              />
+            );
+          })
       ) : (
         <p className="text-gray-500 bg-white p-6 rounded-lg text-center">
           You haven't joined any incomplete friend's goals yet.
