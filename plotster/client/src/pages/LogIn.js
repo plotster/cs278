@@ -3,6 +3,7 @@ import { auth } from "../firebase";
 import db from "../firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber, onAuthStateChanged } from "firebase/auth";
 import { ref, set, get } from "firebase/database";
+import { useNavigate } from "react-router-dom";
 
 // This function is the log in page for the app 
 const LogIn = () => {
@@ -15,6 +16,7 @@ const LogIn = () => {
     const [showNameInput, setShowNameInput] = useState(false);
     const [authReady, setAuthReady] = useState(false);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     // check if the user is already logged in 
     useEffect(() => {
@@ -138,7 +140,7 @@ const LogIn = () => {
             console.log("Existing user found");
             const userData = snapshot.val();
             alert(`Welcome back, ${userData.name}!`);
-            window.location.href = "/bucketlist";      // Redirect them to their homepage bucketlist
+            navigate("/");      // Redirect them to their homepage bucketlist
         }
         } catch (error) {
         console.error("Code verification failed - Full error:", error);
@@ -188,7 +190,7 @@ const LogIn = () => {
 
         // Notify user of successful sign up 
         alert(`Welcome to Plotster, ${name}!`);
-        window.location.href = "/bucketlist";
+        navigate("/");
         } catch (error) {
         console.error("Failed to create user profile:", error);
         alert("Failed to create user profile. Please try again.");

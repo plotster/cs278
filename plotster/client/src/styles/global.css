@@ -15,7 +15,7 @@ code {
 }
 
 .app-container {
-  padding-top: 130px;;
+  padding-top: 136px;
 }
 
 .header-container {
@@ -28,16 +28,18 @@ code {
 
 .selection-container {
   position: fixed;
-  top: 70px; 
+  top: 72px;
   left: 0;
   width: 100%;
-  z-index: 49; 
+  z-index: 49;
   background: #dedede;
-  height: 60px; 
+  height: 64px;
   display: flex;
   align-items: center;
   padding-left: 10%;
   padding-right: 10%;
+  margin-top: 0;
+  border-top: none;
 }
 
 .content-container {
@@ -46,11 +48,12 @@ code {
 
 header {
   background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 0 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 72px;
 }
 
 header .user-profile {

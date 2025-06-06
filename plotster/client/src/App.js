@@ -58,14 +58,19 @@ const App = () => {
       if (userId) {
         try {
           const userDetails = await fetchUserDetails(userId);
-          setCurrentUser(userDetails);
+          if (userDetails) {
+            setCurrentUser(userDetails);
+          } else {
+            // if user exists in auth but not in db, redirect to login to complete profile
+            navigate('/login');
+          }
         } catch (error) {
           console.error("Error fetching current user details:", error);
         }
       }
     };
     loadCurrentUser();
-  }, [userId]); 
+  }, [userId, navigate]); 
 
   // Determine friends list once current user and all users are loaded
   useEffect(() => {
@@ -79,11 +84,18 @@ const App = () => {
       setFriendsList([]); // Reset if no current user or connections
     }
   }, [currentUser, allUsers]);
+
+  const handleAvatarUpdate = (newAvatarUrl) => {
+    setCurrentUser(prevUser => ({
+      ...prevUser,
+      avatar: newAvatarUrl
+    }));
+  };
   
   return (
     <div className="app-container">
       <div className="header-container">
-        <Header user={currentUser} userId={userId} setRefetchJoinedGoalsTrigger={setRefetchJoinedGoalsTrigger}/>
+        <Header user={currentUser} userId={userId} setRefetchJoinedGoalsTrigger={setRefetchJoinedGoalsTrigger} onAvatarUpdate={handleAvatarUpdate}/>
       </div>
 
       <div className="selection-container">

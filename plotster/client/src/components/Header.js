@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Notifications from '../pages/Notifications';
 import { fetchAllUsers, fetchUserNotifications, addConnection, removeConnection, fetchUserDetails } from '../util/NotificationsAPI'; 
+import { auth } from '../firebase';
+import ProfilePicture from './ProfilePicture';
 
 // user prop might be null initially, userId is fallback
-const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
+const Header = ({ user, userId, setRefetchJoinedGoalsTrigger, onAvatarUpdate }) => {
   const [notifications, setNotifications] = useState({});
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -11,6 +13,7 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
   const [userList, setUserList] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [connections, setConnections] = useState({});
+  const [showDropdown, setShowDropdown] = useState(false);
 
   // fetching all the users from the DB
   useEffect(() => {
@@ -42,6 +45,15 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
     }
     loadConnections();
   }, [userId]);
+
+  const handleSignOut = async () => {
+    try {
+      await auth.signOut();
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Failed to sign out:", error);
+    }
+  };
 
   // Handler for follow/unfollow
   const handleFollow = async (targetUserId) => {
@@ -184,10 +196,26 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger }) => {
 
         {/* User Avatar and Name - use fallbacks if user prop is null */}
         {user ? (
-          <>
-            <img src={user.avatar} alt={user.name} className="avatar ml-4" />
-            <span className="user-name ml-2">{user.name}</span>
-          </>
+          <div className="relative">
+            <button onClick={() => setShowDropdown(!showDropdown)} className="flex items-center focus:outline-none">
+              <img src={user.avatar} alt={user.name} className="avatar ml-4" />
+              <span className="user-name ml-2">{user.name}</span>
+              <svg className="ml-1 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+            {showDropdown && (
+              <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-20">
+                <ProfilePicture onUpdate={onAvatarUpdate} />
+                <button
+                  onClick={handleSignOut}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
+          </div>
         ) : (
           <>
             <div className="avatar ml-4 w-10 h-10 bg-gray-300 rounded-full"></div> 
