@@ -28,9 +28,9 @@ export const auth = getAuth(app);
 export const storage = getStorage(app);
 const db = getDatabase(app);
 
-if (window.location.hostname === "localhost" ||
-  window.location.hostname === "127.0.0.1") {
-  connectDatabaseEmulator(db, "localhost", 9000);
-}
+// if (window.location.hostname === "localhost" ||
+//   window.location.hostname === "127.0.0.1") {
+//   connectDatabaseEmulator(db, "localhost", 9000);
+// }
 
 export default db;

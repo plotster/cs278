@@ -86,3 +86,26 @@ export async function addFriendGoal(userId, creatorUserId, creatorGoalId) {
   friendGoalsJoined[creatorUserId][creatorGoalId] = true;
   await set(userRef, friendGoalsJoined);
 }
+
+// send a friend request notification to another user
+export async function sendFriendRequestNotification(sender, targetUserId) {
+  if (!sender || !targetUserId) return;
+  const notifRef = ref(db, `users/${targetUserId}/notifications`);
+  const snapshot = await get(notifRef);
+  let notifications = {};
+  if (snapshot.exists()) {
+    notifications = snapshot.val() || {};
+  }
+  // generate a unique notification ID (timestamp-based)
+  const notifId = `notif_${Date.now()}`;
+  notifications[notifId] = {
+    type: 'friend_request',
+    sender: {
+      id: sender.id,
+      name: sender.name,
+      avatar: sender.avatar || 'default_avatar.png',
+    },
+    time: new Date().toLocaleString(),
+  };
+  await set(notifRef, notifications);
+}

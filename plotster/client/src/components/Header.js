@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Notifications from '../pages/Notifications';
-import { fetchAllUsers, fetchUserNotifications, addConnection, removeConnection, fetchUserDetails } from '../util/NotificationsAPI'; 
+import { fetchAllUsers, fetchUserNotifications, addConnection, removeConnection, fetchUserDetails, sendFriendRequestNotification } from '../util/NotificationsAPI'; 
 import { auth } from '../firebase';
 import ProfilePicture from './ProfilePicture';
 
@@ -19,6 +19,7 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger, onAvatarUpdate }) 
   useEffect(() => {
     async function loadUsers() {
       const users = await fetchAllUsers();
+      console.log("Fetched users:", users); // Debug log
       setUserList(users);
     }
     loadUsers();
@@ -55,19 +56,25 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger, onAvatarUpdate }) 
     }
   };
 
-  // Handler for follow/unfollow
-  const handleFollow = async (targetUserId) => {
-    await addConnection(userId, targetUserId);
-    setConnections(prev => ({ ...prev, [targetUserId]: true }));
-  };
-
-  const handleUnfollow = async (targetUserId) => {
+  // handler for removing a connection (mutual removal)
+  const handleRemoveConnection = async (targetUserId) => {
     await removeConnection(userId, targetUserId);
+    await removeConnection(targetUserId, userId); 
     setConnections(prev => {
       const updated = { ...prev };
       delete updated[targetUserId];
       return updated;
     });
+    setSelectedUserId(null);
+  };
+
+  // handler for connect (send friend request)
+  const handleConnect = async (targetUser) => {
+    await sendFriendRequestNotification(
+      { id: user.id, name: user.name, avatar: user.avatar },
+      targetUser.id
+    );
+    setSelectedUserId(null);
   };
 
   // filter users by search term
@@ -137,22 +144,20 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger, onAvatarUpdate }) 
                             className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                             onClick={async (e) => {
                               e.stopPropagation();
-                              await handleUnfollow(u.id);
-                              setSelectedUserId(null);
+                              await handleRemoveConnection(u.id);
                             }}
                           >
-                            Unfollow
+                            Remove
                           </button>
                         ) : (
                           <button
-                            className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                             onClick={async (e) => {
                               e.stopPropagation();
-                              await handleFollow(u.id);
-                              setSelectedUserId(null);
+                              await handleConnect(u);
                             }}
                           >
-                            Follow
+                            Connect
                           </button>
                         )}
                         <button

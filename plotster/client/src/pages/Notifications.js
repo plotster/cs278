@@ -9,6 +9,7 @@ const Notifications = ({ notifications, setNotifications, userId, onJoinFriendGo
     const senderId = notification.sender?.id;
     if (senderId && notification.type === 'friend_request') {
       await addConnection(userId, senderId);
+      await addConnection(senderId, userId); // mutual connection
     }
 
     // add joined friend goal to bucket list page
