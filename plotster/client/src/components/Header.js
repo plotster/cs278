@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Notifications from '../pages/Notifications';
-import { fetchAllUsers, fetchUserNotifications, addConnection, removeConnection, fetchUserDetails, sendFriendRequestNotification } from '../util/NotificationsAPI'; 
+import { fetchAllUsers, fetchUserNotifications, addConnection, removeConnection, fetchUserDetails, sendFriendRequestNotification, markAllNotificationsRead } from '../util/NotificationsAPI'; 
 import { auth } from '../firebase';
 import ProfilePicture from './ProfilePicture';
+import { getDatabase, ref, onValue } from "firebase/database";
 
 // user prop might be null initially, userId is fallback
 const Header = ({ user, userId, setRefetchJoinedGoalsTrigger, onAvatarUpdate }) => {
@@ -14,6 +15,7 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger, onAvatarUpdate }) 
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [connections, setConnections] = useState({});
   const [showDropdown, setShowDropdown] = useState(false);
+  const [hasUnread, setHasUnread] = useState(false);
 
   // fetching all the users from the DB
   useEffect(() => {
@@ -45,6 +47,19 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger, onAvatarUpdate }) 
       setConnections(details?.connections || {});
     }
     loadConnections();
+  }, [userId]);
+
+  // real-time notifications listener
+  useEffect(() => {
+    if (!userId) return;
+    const db = getDatabase();
+    const notifRef = ref(db, `users/${userId}/notifications`);
+    const unsubscribe = onValue(notifRef, (snapshot) => {
+      const data = snapshot.val() || {};
+      setNotifications(data);
+      setHasUnread(Object.values(data).some(n => n && n.read === false));
+    });
+    return () => unsubscribe();
   }, [userId]);
 
   const handleSignOut = async () => {
@@ -85,6 +100,14 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger, onAvatarUpdate }) 
   // display name and avatar if user data is loaded, otherwise fallback or hide
   const userName = user ? user.name : 'Loading...';
   const userAvatar = user ? user.avatar : 'default_avatar.png'; // Provide a path to a default avatar
+
+  // mark notifications as read when opening the panel
+  const handleShowNotifications = async () => {
+    if (!showNotifications && hasUnread) {
+      await markAllNotificationsRead(userId);
+    }
+    setShowNotifications(s => !s);
+  };
 
   return (
     <header className="header">
@@ -151,7 +174,7 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger, onAvatarUpdate }) 
                           </button>
                         ) : (
                           <button
-                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                            className="bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600"
                             onClick={async (e) => {
                               e.stopPropagation();
                               await handleConnect(u);
@@ -185,11 +208,14 @@ const Header = ({ user, userId, setRefetchJoinedGoalsTrigger, onAvatarUpdate }) 
         <div className="relative">
           <button
             className="focus:outline-none mx-0"
-            onClick={() => setShowNotifications(s => !s)}
+            onClick={handleShowNotifications}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-500 hover:text-purple-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 7.165 6 9.388 6 12v2.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
             </svg>
+            {hasUnread && !showNotifications && (
+              <span className="red-dot"></span>
+            )}
           </button>
           {showNotifications && (
             <div className="absolute right-0 mt-2 w-90 bg-white border rounded shadow-lg z-20">

@@ -105,7 +105,21 @@ export async function sendFriendRequestNotification(sender, targetUserId) {
       name: sender.name,
       avatar: sender.avatar || 'default_avatar.png',
     },
-    time: new Date().toLocaleString(),
+    time: new Date().toISOString(),
+    read: false,
   };
   await set(notifRef, notifications);
+}
+
+// mark all notifications as read for a user
+export async function markAllNotificationsRead(userId) {
+  const notifRef = ref(db, `users/${userId}/notifications`);
+  const snapshot = await get(notifRef);
+  if (snapshot.exists()) {
+    const notifications = snapshot.val();
+    Object.keys(notifications).forEach(key => {
+      notifications[key].read = true;
+    });
+    await set(notifRef, notifications);
+  }
 }

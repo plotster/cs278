@@ -408,3 +408,15 @@ button.bg-gray-200:hover {
     gap: 0.25em;
   }
 }
+
+.red-dot {
+  position: absolute;
+  top: 0.2rem;
+  right: 0.2rem;
+  width: 12px;
+  height: 12px;
+  background: #ef4444;
+  border-radius: 50%;
+  border: 2px solid white;
+  z-index: 30;
+}

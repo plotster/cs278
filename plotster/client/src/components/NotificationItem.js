@@ -20,7 +20,15 @@ const NotificationItem = ({ notification, onAccept, onDecline }) => {
       <div className="notification-content">
         <div className="notification-text">
           <p className="notification-message">{message}</p>
-          <p className="notification-time">{notification.time}</p>
+          <p className="notification-time">{
+            (() => {
+              if (notification.time && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(notification.time)) {
+                // if ISO string, format to local
+                return new Date(notification.time).toLocaleString();
+              }
+              return notification.time;
+            })()
+          }</p>
         </div>
         <div className="notification-actions">
           <button
